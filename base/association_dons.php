@@ -9,3 +9,8 @@ function association_dons_declarer_tables_principales($tables) {
 	), 'key' => array('PRIMARY KEY' => 'id_don'));
 	return $tables;
 }
+
+function association_dons_declarer_tables_interfaces($interfaces) {
+	$interfaces['table_des_tables']['asso_dons'] = 'asso_dons';
+	return $interfaces;
+}
