@@ -1,0 +1,6 @@
+<paquet prefix="association_dons" categorie="divers" version="4.0.0" etat="dev" compatibilite="[4.0.0;4.*]" schema="1.0.0">
+	<nom>Association - Dons</nom>
+	<auteur>Julien Bellegueulle</auteur>
+	<licence lien="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</licence>
+	<pipeline nom="declarer_tables_principales" inclure="base/association_dons.php" />
+</paquet>
