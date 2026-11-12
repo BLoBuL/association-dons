@@ -4,7 +4,7 @@ include_spip('inc/association_dons_soutiens');
 
 function formulaires_devenir_ami_charger_dist($id_donateur = 0, $annee = 0, $jeton = '') {
 	$config = association_dons_configuration();
-	if (!$config['url_confidentialite']) { return '<p class="notice">' . _T('association_dons:configuration_incomplete') . '</p>'; }
+	if (!$config['url_confidentialite'] || (!empty($GLOBALS['association_metas']['comptes']) && (empty($config['journal_dons']) || empty($config['imputation_dons'])))) { return '<p class="notice">' . _T('association_dons:configuration_incomplete') . '</p>'; }
 	if ((int)$id_donateur && !association_dons_renouvellement_valide($id_donateur, (int)$annee, $jeton)) { return '<p class="error">' . _T('association_dons:lien_invalide') . '</p>'; }
 	$cle = _request('cle_demande') ?: hash('sha256', random_bytes(32));
 	$horodatage = _request('horodatage') ?: time();

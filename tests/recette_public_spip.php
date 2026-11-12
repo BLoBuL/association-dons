@@ -6,7 +6,7 @@ $identite_avant = $GLOBALS['visiteur_session'] ?? array();
 $GLOBALS['visiteur_session'] = array();
 $cle = ''; $r = array();
 try {
-	$config = association_dons_configuration(); $config['url_confidentialite'] = 'https://example.invalid/confidentialite'; $config['virement'] = 'oui'; $config['notifications'] = 'non';
+	$config = association_dons_configuration(); $config['url_confidentialite'] = 'https://example.invalid/confidentialite'; $config['virement'] = 'oui'; $config['notifications'] = 'non'; $config['journal_dons'] = '101'; $config['imputation_dons'] = '758';
 	ecrire_config('association_dons', $config);
 	$charger = formulaires_devenir_ami_charger_dist();
 	$cle = $charger['cle_demande'];
@@ -31,6 +31,9 @@ try {
 	$r['formulaire_rendu'] = strpos($formulaire, 'name="montant"') !== false && strpos($formulaire, 'name="consentement"') !== false;
 	$r['aucune_validation_par_url'] = sql_getfetsel('statut', 'spip_asso_dons_suivi', 'id_don_suivi=' . (int)$suivi['id_don_suivi']) === 'attente';
 	$r['erreurs_squelettes'] = count($GLOBALS['tableau_des_erreurs'] ?? array());
+	lang_select('en');
+	try { $r['formulaire_anglais'] = strpos(recuperer_fond('content/association_dons', array('lang' => 'en')), 'Become a Friend') !== false; }
+	finally { lang_select(); }
 } finally {
 	$s = $cle ? sql_fetsel('*', 'spip_asso_dons_suivi', 'cle_creation=' . sql_quote($cle)) : array();
 	if ($s) {

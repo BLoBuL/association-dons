@@ -27,6 +27,9 @@ function formulaires_configurer_association_dons_verifier_dist() {
 	foreach (array('preavis_renouvellement', 'delai_rappel') as $champ) {
 		if (!ctype_digit((string)_request($champ)) || (int)_request($champ) < 1 || (int)_request($champ) > 365) { $erreurs[$champ] = _T('association_dons:erreur_champ'); }
 	}
+	foreach (array('journal_dons', 'imputation_dons') as $champ) {
+		if (_request($champ) !== '' && !preg_match('/^[a-zA-Z0-9_.-]{1,30}$/D', (string)_request($champ))) { $erreurs[$champ] = _T('association_dons:erreur_champ'); }
+	}
 	return $erreurs;
 }
 function formulaires_configurer_association_dons_traiter_dist() {

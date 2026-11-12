@@ -20,6 +20,10 @@ try {
 	$r['etat_capture_distinct_envoi'] = sql_getfetsel('etat', 'spip_asso_dons_notifications', 'id_don_notification=' . $n) === 'capture';
 	$r['destinataire_attendu'] = $GLOBALS['association_dons_emails_captures'][0]['destinataire'] === 'recette-emails@example.invalid';
 	$r['contenu_creation'] = strpos($GLOBALS['association_dons_emails_captures'][0]['texte'], '40,00 EUR') !== false && strpos($GLOBALS['association_dons_emails_captures'][0]['texte'], '2027') !== false;
+	sql_updateq('spip_asso_donateurs', array('langue' => 'en'), 'id_donateur=' . $id);
+	$message_anglais = association_dons_message_notification(sql_fetsel('*', 'spip_asso_dons_notifications', 'id_don_notification=' . $n));
+	$r['email_anglais'] = strpos($message_anglais['sujet'], 'Your support request') !== false && strpos($message_anglais['texte'], 'Your annual donation') !== false;
+	sql_updateq('spip_asso_donateurs', array('langue' => 'fr'), 'id_donateur=' . $id);
 	$GLOBALS['visiteur_session'] = sql_fetsel('id_auteur,nom,statut,webmestre', 'spip_auteurs', "login='blobul_ai'");
 	association_dons_confirmer_externe($s['id_don_suivi'], 'RECETTE confirmation Fondation');
 	$n_regle = (int)sql_getfetsel('id_don_notification', 'spip_asso_dons_notifications', 'id_donateur=' . $id . " AND type_notification='soutien_regle'");

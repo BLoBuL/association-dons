@@ -42,6 +42,7 @@ function association_dons_creer_soutien($donnees, $montant, $mode, $cle, $renouv
 	$modes = array('bank');
 	foreach (array('virement', 'fondation') as $autre) { if ($config[$autre] === 'oui') { $modes[] = $autre; } }
 	if (!$centimes || $centimes < association_dons_centimes($config['minimum']) || !in_array($mode, $modes, true) || !preg_match('/^[a-f0-9]{64}$/D', (string)$cle)) { return array('erreur' => 'demande_invalide'); }
+	if ($mode !== 'fondation' && !empty($GLOBALS['association_metas']['comptes']) && (empty($config['journal_dons']) || empty($config['imputation_dons']))) { return array('erreur' => 'configuration_comptable_incomplete'); }
 	$id_donateur = (int)($renouvellement['id_donateur'] ?? 0);
 	if ($id_donateur) {
 		if (!association_dons_renouvellement_valide($id_donateur, (int)($renouvellement['annee'] ?? 0), $renouvellement['jeton'] ?? '')) { return array('erreur' => 'interdit'); }
@@ -132,11 +133,11 @@ function association_dons_reglement($id_suivi, $preuve) {
 		// Un don à la Fondation n'est pas une recette sur le compte bancaire de l'association.
 		if ($suivi['mode_paiement'] !== 'fondation' && !empty($GLOBALS['association_metas']['comptes'])) {
 			$config = association_dons_configuration();
-			if (empty($config['journal_dons']) || empty($GLOBALS['association_metas']['pc_dons'])) { return false; }
+			if (empty($config['journal_dons']) || empty($config['imputation_dons'])) { return false; }
 			$id_compte = (int)sql_getfetsel('id_compte', 'spip_asso_comptes', "objet='don' AND id_objet=" . (int)$suivi['id_don']);
 			if (!$id_compte) {
 				include_spip('inc/comptes');
-				$id_compte = (int)inserer_compte(date('Y-m-d'), $suivi['montant'], 0, 'Don Ami #' . (int)$suivi['id_don'], $GLOBALS['association_metas']['pc_dons'], $config['journal_dons'], 0, $suivi['id_don'], 'don', '', 0, null, $suivi['id_transaction'] ?: null);
+				$id_compte = (int)inserer_compte(date('Y-m-d'), $suivi['montant'], 0, 'Don Ami #' . (int)$suivi['id_don'], $config['imputation_dons'], $config['journal_dons'], 0, $suivi['id_don'], 'don', '', 0, null, $suivi['id_transaction'] ?: null);
 			}
 			if (!$id_compte) { return false; }
 		}

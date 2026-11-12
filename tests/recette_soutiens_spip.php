@@ -10,7 +10,7 @@ $total_comptes = sql_countsel('spip_asso_comptes');
 try {
 	$config = association_dons_configuration();
 	$config['virement'] = $config['fondation'] = 'oui';
-	$config['notifications'] = 'non'; $config['journal_dons'] = '101';
+	$config['notifications'] = 'non'; $config['journal_dons'] = '101'; $config['imputation_dons'] = '758';
 	ecrire_config('association_dons', $config);
 	$GLOBALS['association_metas']['comptes'] = true;
 	$GLOBALS['association_metas']['pc_dons'] = '758';
@@ -43,6 +43,10 @@ try {
 	$compte_avant = sql_fetsel('*', 'spip_asso_comptes', 'id_compte=' . (int)$suivi['id_compte']);
 	pipeline('trig_bank_notifier_reglement', array('args' => array('id_transaction' => (int)$suivi['id_transaction'], 'succes' => true, 'type' => 'acte'), 'data' => ''));
 	$r['integration_association_sans_cotisation'] = sql_fetsel('*', 'spip_asso_comptes', 'id_compte=' . (int)$suivi['id_compte']) === $compte_avant;
+	include_spip('inc/association_dons_notifications');
+	sql_updateq('spip_asso_dons_suivi', array('statut' => 'attente'), 'id_don_suivi=' . (int)$suivi['id_don_suivi']);
+	association_dons_preparer_revue();
+	$r['reconciliation_bank_sans_double_ecriture'] = sql_getfetsel('statut', 'spip_asso_dons_suivi', 'id_don_suivi=' . (int)$suivi['id_don_suivi']) === 'regle' && sql_countsel('spip_asso_comptes', "objet='don' AND id_objet=" . (int)$suivi['id_don']) === 1;
 	foreach (array('virement', 'fondation') as $mode) {
 		$cle = hash('sha256', random_bytes(32)); $cles[] = $cle;
 		$externe = association_dons_creer_soutien($donnees, '40', $mode, $cle)['suivi'];

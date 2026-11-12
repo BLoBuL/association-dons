@@ -20,6 +20,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'soutien_confirme' => 'Thank you! Your annual support is confirmed.', 'reglement_attendu' => 'Your request has been recorded. Your support will be confirmed once payment has been received and validated.',
 	'reference_don' => 'Payment reference: support', 'fondation_explication' => 'Continue your donation on the Foundation website. The secretariat will then confirm receipt. The Foundation provides the applicable tax information.',
 	'aller_fondation' => 'Open the Foundation donation form', 'journal_dons' => 'Accounting journal code for directly received donations',
+	'imputation_dons' => 'Accounting allocation code for directly received donations',
 	'confirmer_reglement' => 'Confirm external payment', 'preuve_reglement' => 'Payment reference or confirmation received', 'reglement_ok' => 'Payment has been confirmed.',
 	'erreur_reglement' => 'Payment could not be confirmed. Please check the reference and accounting settings.',
 	'mail_soutien_cree_sujet' => '@site@ — Your support request',

@@ -73,6 +73,11 @@ function association_dons_preparer_revue($date = null) {
 	$date = $date ?: date('Y-m-d');
 	$config = association_dons_configuration();
 	sql_updateq('spip_asso_donateurs_periodes', array('statut' => 'echu'), "statut='a_jour' AND date_fin<" . sql_quote($date));
+	// Réconcilier un règlement déjà confirmé par Bank, par exemple après réparation
+	// de la configuration comptable. Aucun nouvel appel au prestataire bancaire.
+	foreach (sql_allfetsel('id_transaction', 'spip_asso_dons_suivi', "statut='attente' AND mode_paiement='bank' AND id_transaction>0") as $suivi) {
+		association_dons_confirmer_bank($suivi['id_transaction']);
+	}
 	if ($config['notifications'] !== 'oui') { return; }
 	$limite = date('Y-m-d H:i:s', strtotime($date . ' -' . (int)$config['delai_rappel'] . ' days'));
 	foreach (sql_allfetsel('id_don_suivi,id_donateur', 'spip_asso_dons_suivi', "statut='attente' AND date_creation<" . sql_quote($limite)) as $suivi) {
