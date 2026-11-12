@@ -1,30 +1,45 @@
-# Première recette DEV — 12 novembre 2026
+# Recette DEV — 12 novembre 2026
 
-Code installé : `0acfa06533800edab5a2cd126f5f6fd5f4a232fd`, branche `codex/donateurs-schema-association`.
+Cible unique : `https://dev.blobul.com`, plugin chargé depuis `plugins/association-dons/`. SPIP 4.4.30, PHP 8.4.27, Association 6.10.27, Bank 7.2.0 ; schéma du module 1.4.0. Branche `codex/donateurs-schema-association`. Aucun site client modifié, aucune release publiée.
 
-Cible : `https://dev.blobul.com`, SPIP 4.4.30 / PHP 8.4.27, Association 6.10.27 et Bank 7.2.0. Contacts & Organisations absent : le module s’active sans cette option.
+## Source et installation
 
-Installation directe dans `plugins/association-dons/`. Les huit fichiers exportés par `git archive` ont une empreinte identique à l’archive transférée (SHA-256 `05a57a858eb03d402be10ae48ed0752b8fa5d9aa9974c1e4e05ed53f3d8de165`). Les tests ne sont pas livrés, conformément à `.gitattributes`. La comparaison porte sur les octets de l’archive Git, qui diffèrent ici des blobs bruts par leurs fins de ligne.
+La base de code fonctionnelle finale est le commit `9e8eb19336a6f1d078f5cb0353026215500987b9`. L’export correspondant porte le SHA-256 `c41228dba0367ec2b9ab93db90a0d790761df3245a01476803e79f91f7742b81` (43 fichiers vérifiés). La livraison finale de documentation inclut aussi le contrôle d’enregistrement de configuration dans la recette privée, sans modification de ce code d’exécution. Le reçu de déploiement final donne son commit exact ; il est conservé hors dépôt pour éviter une référence circulaire.
 
-## Résultats serveur
+Chaque déploiement utilise `git archive` du commit exact, une sauvegarde privée des dons, des quatre tables complémentaires et de leurs métadonnées, la validation native du manifeste avant remplacement, puis une vérification SHA-256 de tous les fichiers et une purge du cache. Les tests sont exclus de l’archive. Les octets de l’archive font foi, Git pouvant normaliser les fins de ligne.
 
-- Activation de `association_dons` avec les dépendances présentes.
-- Installation native par `association_dons_upgrade` et `maj_plugin` : schéma 1.1.0, trois tables créées.
-- Simulation du passage de la métadonnée 1.0.0 vers 1.1.0, tables déjà présentes : reprise sans perte.
-- La table historique était vide avant recette. Un don synthétique inséré avant installation a été comparé intégralement après installation et après reprise : identique.
-- Création par l’API SQL SPIP d’un donateur sans adhérent ni organisation, d’une période 2026–2027 et du rattachement au don synthétique : réussite.
-- Doublons donateur/année et suivi d’un même don : refus par les contraintes SQL.
-- Nombre d’écritures comptables inchangé : 104. Aucun paiement ni email déclenché.
-- Nettoyage des quatre enregistrements synthétiques vérifié : table des dons revenue à zéro, trois nouvelles tables vides.
-- Cache vidé ; accueil HTTP 200, contrôle `Blobul-Recette-Dons/1.0`, CF-RAY `a5944fe5093bd87b-VIE`.
-- Authentification du compte technique dans un profil isolé confirmée par le helper, puis profil supprimé. Le navigateur interactif disponible utilisait un autre profil et affichait la connexion : aucune recette visuelle authentifiée ni capture de nouvel écran revendiquée.
+## Résultats vérifiés
 
-## Limites
+| Domaine | Preuves et résultat |
+| --- | --- |
+| Règles | Montants stricts, minimum, identités, dates limites, période 2026–2027 puis annuelle, statuts et priorité de l’archivage : tests PHP réussis. |
+| Structure | DDL MariaDB réel, clés uniques donateur/année, don et événements ; contraintes et conservation vérifiées. |
+| Installation native | Création des quatre tables depuis zéro, migration 1.0 vers 1.4, conservation d’un donateur synthétique et conservation à la désinstallation. Les tables originales ont été remises en place après le test isolé. |
+| Administration | Refus visiteur, autorisation administrateur, présence du menu natif, création, modification, recherche, archivage, validation email ; compilation des trois écrans privés sans erreur de squelette. Configuration valide enregistrée ; devise inconnue et montants incohérents refusés. |
+| Paiement | Intention sans ancien don, création Bank sans adhérent, double soumission identique sans doublon, contenu modifié refusé, lien invalide refusé ; transaction non réglée ou insuffisante refusée. Règlement confirmé par pipeline : un don et une écriture, sans cotisation d’adhérent. |
+| Concurrence | Quatre callbacks SSH simultanés sur une même transaction synthétique : une seule création de don et une seule écriture. Vérifié sur le même hôte SPIP, sans prétention de verrou distribué multi-nœuds. |
+| Reprise | Relecture quotidienne des règlements Bank confirmés et rappel du callback : aucune double écriture. Préparation incomplète conservée et non rejouée. |
+| Confirmation externe | Visiteur ou preuve vide refusés ; confirmation administrateur testée pour virement et Fondation. La Fondation ne génère pas de recette bancaire locale. |
+| Public | Consentement, signature, minimum et jetons ; double soumission ; absence d’identité sur la page de paiement ; compilation sans erreur ; contenu anglais. Soumission réelle dans le navigateur jusqu’aux choix Bank de test, sans clic de paiement prestataire. |
+| Notifications | Capture sans file ni email réel ; événement unique, pas de second envoi, contenu montant/année et anglais ; confirmation, rappel annulé après paiement, expiration, invitation unique après deux revues, lien de renouvellement réutilisant la fiche. |
+| Contacts optionnel | Contacts 5.3.2 temporairement actif : rattachement, fiche organisation, échappement d’un nom malveillant, refus d’un identifiant inexistant et rendu du sélecteur. Les lignes des quatre tables Contacts ont été comparées avant/après : identiques. Plugin désactivé à nouveau. |
 
-Ce lot porte sur le schéma. Les écrans donateurs, notifications et traitements de paiement ne sont pas encore développés. Le test de reprise ne remplace pas une migration depuis une ancienne installation client peuplée. La variante avec Contacts & Organisations actif reste à recetter.
+Les recettes SPIP sont `recette_installation_spip.php`, `recette_spip.php`, `recette_soutiens_spip.php`, `recette_public_spip.php`, `recette_notifications_spip.php`, `recette_contacts_spip.php`. Les sorties de la matrice finale sont conservées dans le dossier temporaire privé de travail avec les reçus de livraison.
 
-## Retour arrière
+## Rendu public
 
-État initial et preuves sur l’hébergement, hors webroot : `~/tmp/recette-dons-0acfa06-20261112/` (`avant.json`, `fixture-avant.json`, `recette.json`, `code.tar`).
+Contrôle dans Chrome de la page publique, sur ordinateur et à 390 px. Après correction CSS limitée au formulaire : boutons et cases alignés, largeur du document sans débordement horizontal. Les captures utilisent une configuration synthétique de recette et le code de présentation `3bf267f`, identique dans la base fonctionnelle finale.
 
-Le plugin était absent avant installation. Pour revenir à cet état, le désactiver puis retirer seulement son répertoire vérifié. Conserver les tables nouvelles par défaut ; ne restaurer les métadonnées ou supprimer ces tables que dans une restauration ciblée contrôlée, après vérification d’absence de nouvelles données. La désinstallation d’Association n’est pas une procédure de rollback.
+![Formulaire public sur ordinateur](docs/captures/formulaire-dev-bureau.png)
+
+![Haut de page sur mobile à 390 px](docs/captures/formulaire-dev-mobile.png)
+
+La seconde capture montre le haut de page, pas l’intégralité du formulaire. Les écrans privés ont été testés par rendu natif serveur et contrôles d’autorisation ; aucune recette visuelle privée authentifiée n’est revendiquée. Le repli public sans Zcore n’a pas été essayé visuellement sur une seconde pile.
+
+## Conservation et limites
+
+À l’origine et après nettoyage : zéro don historique, zéro ligne dans chacune des quatre tables du module, 104 écritures comptables natives. Les recettes de migration ont utilisé des lignes synthétiques pour démontrer la conservation ; elles ne constituent pas une migration d’un portefeuille client réel. Les transactions, donateurs, suivis, périodes et notifications synthétiques ont été supprimés.
+
+Les profils temporaires d’authentification ont été fermés et retirés. La configuration antérieure aux captures est restaurée : aucune URL juridique fictive n’est laissée active. Contacts reste facultatif et inactif sur DEV ; ses fichiers sont disponibles pour une nouvelle recette.
+
+Avant mise en service client : renseigner les véritables informations de confidentialité, le journal et l’imputation des dons (l’imputation native DEV était vide), les moyens Bank et les instructions externes ; valider séparément encaissement et délivrabilité dans un cadre autorisé. Les tests ont capturé les messages et n’ont produit ni paiement réel ni envoi réel. Aucune garantie de réception email, aucun reçu fiscal, aucune production et aucun prélèvement automatique ne sont revendiqués.

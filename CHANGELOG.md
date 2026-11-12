@@ -1,20 +1,15 @@
 # Journal des modifications
 
-Toutes les modifications notables de `association-dons` sont documentées ici.
-
 ## [À venir]
 
-### Développement
-
-- Dépendances explicites à Association et Bank, avec Contacts & Organisations facultatif.
-- Schéma 1.1.0 : donateurs, périodes de soutien et suivi des dons, sans modification de la table historique détenue par Association.
-- Recette MariaDB de conservation des dons et des contraintes d’unicité ; conservation des tables à la désinstallation du module.
-
-### Maintenance
-
-- Création de ce changelog et adoption de son suivi dans les procédures de consolidation et de release.
+- Compatibilité avec Association 6.x et Bank, intégration Contacts & Organisations facultative, sans redéclaration des anciens dons.
+- Schéma additif 1.4.0 : donateurs indépendants des adhérents, périodes, suivi des intentions/règlements et journal des notifications. Conservation des données à la désinstallation du module.
+- Formulaire public FR/EN sans compte, consentement et choix de publication, montants paramétrables et montant libre, liens signés de paiement et renouvellement.
+- Liste et fiches privées, recherche, statuts calculés, archivage, organisation facultative et configuration comptable propre au module.
+- Intégration Bank avec confirmation vérifiée et idempotente ; don historique créé seulement après règlement. Virement et Fondation confirmés par administrateur avec preuve ; aucune recette bancaire locale pour la Fondation.
+- Soutien 2026 valable jusqu’à fin 2027, puis renouvellements annuels ; notifications journalisées, rappels et revue quotidienne sans doublons ni prélèvement automatique.
+- Recettes PHP, MariaDB et SPIP, callbacks concurrents et contrôles publics ordinateur/mobile sur DEV. Guide d’utilisation et rapport de recette précisant les limites des tests.
 
 ## Historique antérieur
 
-L’historique antérieur au 5 octobre 2026 n’est pas reconstitué ici. Il reste consultable dans les commits, les tags et les releases Git du dépôt.
-
+L’historique antérieur au 5 octobre 2026 n’est pas reconstitué ici. Il reste consultable dans les commits, tags et releases Git du dépôt.

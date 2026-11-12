@@ -1,33 +1,40 @@
-# Association - Dons
+# Association — Dons et Amis
 
-Plugin SPIP 4/PHP 8 complémentaire d’Association 6.x (à partir de 6.9.11) et de Bank 6.4 ou supérieur. Contacts & Organisations (`contacts` 5.3.2 ou supérieur) reste facultatif.
+Module autonome pour SPIP 4 / PHP 8, complémentaire d’Association 6.x (à partir de 6.9.11) et de Bank (à partir de 6.4). Contacts & Organisations (`contacts` 5.3.2 ou supérieur) est facultatif. Développement sur la branche `codex/donateurs-schema-association`, sans release ni installation client.
 
-## Responsabilités et compatibilité
+Le module gère les donateurs sans compte adhérent, les intentions de soutien, leur règlement et leur renouvellement annuel. Il fournit un formulaire public FR/EN, une liste et des fiches privées, des montants paramétrables, des confirmations manuelles et des notifications journalisées.
 
-Association conserve la déclaration, les écrans, les écritures comptables et les dons de `spip_asso_dons`. Le module ne redéclare plus cette table : sa structure ne dépend donc pas de l’ordre des pipelines. Les pipelines natifs `declarer_tables_principales` et `declarer_tables_interfaces` déclarent les nouvelles tables et leurs alias sans remplacer les déclarations voisines.
+## Utilisation
 
-Cette première étape fournit le schéma, pas encore les écrans des donateurs, les traitements Bank, les emails ou le calcul des statuts. Aucun pipeline de règlement n’est ajouté tant que le traitement métier correspondant n’est pas implémenté.
+Voir le [guide d’utilisation](GUIDE-UTILISATION.md) pour la configuration, le parcours public et les opérations administratives. La [recette DEV](RECETTE-DEV.md) distingue les tests serveur, les contrôles visuels et les limites de validation.
 
-## Nouvelles tables — schéma 1.1.0
+## Données et conservation
 
-| Table | Responsabilité |
+Association conserve la propriété de `spip_asso_dons` et de sa comptabilité. Le module ne redéclare pas cette table et ne déduit aucune identité du champ historique `bienfaiteur`.
+
+| Table complémentaire | Responsabilité |
 | --- | --- |
-| `spip_asso_donateurs` | Identité et email du donateur, type particulier/organisation, rattachement optionnel, autorisation de publication du nom et date du consentement relatif aux données. Aucun compte adhérent n’est requis. |
-| `spip_asso_donateurs_periodes` | Année de soutien, bornes de validité et statut, avec unicité donateur/année. Les bornes permettent notamment de couvrir 2026–2027 dans une seule période de renouvellement 2027. |
-| `spip_asso_dons_suivi` | Rattachement d’un don existant au donateur, à sa période et éventuellement à une transaction Bank. Un seul suivi par don ; plusieurs dons possibles par donateur et période. |
+| `spip_asso_donateurs` | Identité, langue, consentement, publication du nom, archivage et organisation facultative ; aucun adhérent requis. |
+| `spip_asso_donateurs_periodes` | Période de soutien, unique par donateur et année. |
+| `spip_asso_dons_suivi` | Intention, montant et devise, transaction Bank éventuelle, preuve de règlement et liens vers don/période/comptabilité. `id_don` reste NULL avant règlement. |
+| `spip_asso_dons_notifications` | Journal des événements et de leur prise en charge, avec clé de déduplication. |
 
-Les identifiants optionnels valent zéro en l’absence de liaison. Un suivi exige un véritable `id_don` : il ne sert pas à stocker plusieurs intentions avec `id_don=0`. Le montant reste celui du don et de la transaction, sans copie concurrente dans le suivi. L’email n’est pas une clé unique : les règles d’identification restent à traiter dans l’API métier. Les statuts de période utiliseront `attente`, `a_jour`, `echu` ; l’archivage du donateur porte le classement Ancien.
+Le schéma 1.4.0 utilise les mises à niveau natives `maj_plugin`. Installation et migration sont additives ; les dons historiques restent inchangés. La désinstallation de ce module conserve ses données et retire seulement sa métadonnée de schéma. La désinstallation destructive d’Association possède ses propres effets et ne relève pas de cette protection.
 
-## Installation et conservation
+Une intention en attente ne crée aucun ancien don ni écriture comptable. Après règlement confirmé, le module crée le don historique et, pour Bank/virement, l’écriture via l’API native d’Association. La confirmation Fondation crée le don mais aucune recette bancaire locale, les fonds étant reçus par la Fondation. Un soutien réglé en 2026 couvre jusqu’au 31 décembre 2027 ; les périodes suivantes sont annuelles.
 
-L’installation neuve et la montée depuis 1.0.0 appellent `maj_tables` sur les seules trois nouvelles tables. Elles n’importent, ne réécrivent et ne suppriment aucun don historique ; aucun donateur n’est inventé à partir du texte libre `bienfaiteur`. Les tables complémentaires restent conservées à la désinstallation du module.
+## Intégrations
 
-Attention : la désinstallation destructive d’Association possède sa propre suppression historique de `spip_asso_dons`. La conservation assurée ici concerne l’installation, la montée de schéma et la désinstallation d’**association-dons**, pas celle de son plugin requis Association. Avant recette SPIP ou livraison, sauvegarder les tables et la version de schéma ; restaurer le code seul ne rétrograde pas une base.
+- Déclaration des seules tables complémentaires par les pipelines SPIP ; menu et affichages privés par les points d’extension natifs.
+- Règlement et retour Bank : relecture de la transaction, validation du rattachement, du statut réglé, du montant et de la devise. Un simple retour navigateur ne confirme aucun règlement.
+- Événements métier via `association_dons_evenement`, traitement quotidien via le cron SPIP, courriels via la file native.
+- Contacts actif : choix d’une organisation existante et affichage des donateurs sur sa fiche. Sans Contacts, aucune requête sur ses tables n’est nécessaire.
+- CSS public limité au formulaire ; route Zcore lorsque disponible, page autonome de repli sinon.
 
-## Vérification
+Les clés d’intention et d’événement ainsi que les verrous locaux SPIP empêchent les doubles soumissions, règlements et envois. Une préparation incomplète ou un envoi incertain reste traçable et n’est pas automatiquement rejoué. La revue quotidienne reprend les transactions Bank confirmées dont la comptabilisation attendait une configuration valide, sans appeler le prestataire de paiement.
 
-La [première recette sur DEV](RECETTE-DEV.md) valide l’installation SPIP du commit `0acfa06`, la conservation d’un don synthétique et les contraintes SQL. Les limites de cette recette y sont détaillées.
+## Vérification et livraison
 
-`php tests/test_structure.php` vérifie les contrats de déclaration et le plan de migration avec un harnais local. Avec `ASSOCIATION_DONS_TEST_PORT` défini, le test crée puis supprime une base synthétique sur un serveur MariaDB local dédié (`127.0.0.1`, utilisateur de recette root sans mot de passe). Ne jamais pointer ce test sur un serveur de données réelles.
+`php tests/test_regles.php` et `php tests/test_structure.php` contrôlent règles et contrats de schéma. Les recettes `tests/recette_*_spip.php` exigent un SPIP isolé, avec sauvegarde préalable ; certaines modifient temporairement les tables/configurations et ne doivent pas être exécutées sur un site client. Les tests sont exclus des archives par `.gitattributes`.
 
-Le test MariaDB exécute le DDL déclaré, contrôle la conservation d’un don, son rattachement sans adhérent ni organisation, et les contraintes d’unicité. La recette du moteur `maj_plugin` dans SPIP avec Association et Bank actifs est décrite ci-dessus. La compatibilité sur les autres versions PHP/SPIP annoncées reste à vérifier avant livraison client.
+Avant installation : sauvegarder tables, métadonnées et code ; vérifier les dépendances et le chemin réellement chargé. Le retour arrière du code ne rétrograde pas une base : restaurer ensemble les données/configurations compatibles si nécessaire. La livraison DEV utilise un export Git exact, des sauvegardes privées et la vérification SHA-256 de chaque fichier. Aucune release, archive publique ou livraison client n’est impliquée.

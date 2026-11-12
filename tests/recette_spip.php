@@ -4,6 +4,7 @@ if (!defined('_ECRIRE_INC_VERSION') || strpos($GLOBALS['meta']['adresse_site'] ?
 include_spip('inc/association_dons');
 $resultats = array();
 $ancienne_identite = $GLOBALS['visiteur_session'] ?? array();
+$configuration_avant = lire_config('association_dons', null);
 $GLOBALS['visiteur_session'] = array();
 $resultats['visiteur_refuse'] = association_dons_enregistrer_donateur(0, array()) === array('erreur' => 'interdit');
 $qui = sql_fetsel('id_auteur,nom,statut,webmestre', 'spip_auteurs', "login='blobul_ai'");
@@ -38,8 +39,11 @@ try {
 	$resultats['montant_propose_inferieur_minimum_refuse'] = isset(formulaires_configurer_association_dons_verifier_dist()['montants']);
 	set_request('minimum', '40'); set_request('devise', 'ZZZ');
 	$resultats['devise_inconnue_refusee'] = isset(formulaires_configurer_association_dons_verifier_dist()['devise']);
+	set_request('devise', 'EUR');
+	$resultats['configuration_enregistree'] = !empty(formulaires_configurer_association_dons_traiter_dist()['message_ok']);
 } finally {
 	if ($id) { sql_delete('spip_asso_donateurs', 'id_donateur=' . (int)$id); }
+	if ($configuration_avant === null) { effacer_config('association_dons'); } else { ecrire_config('association_dons', $configuration_avant); }
 	$GLOBALS['visiteur_session'] = $ancienne_identite;
 }
 echo json_encode($resultats, JSON_UNESCAPED_UNICODE);
