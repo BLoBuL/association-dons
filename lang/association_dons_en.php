@@ -1,6 +1,7 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'suivi_soutien' => 'Your support status',
 	'section_identite' => 'Your contact details',
 	'section_preferences' => 'Your preferences and personal data',
 	'mode_recette' => 'Test mode: no module payment or email',
