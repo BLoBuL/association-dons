@@ -4,6 +4,9 @@
 <form method="post" action="#ENV{action}"><div>#ACTION_FORMULAIRE{#ENV{action}}
 <input type="hidden" name="cle_demande" value="#ENV{cle_demande}" /><input type="hidden" name="horodatage" value="#ENV{horodatage}" /><input type="hidden" name="signature_demande" value="#ENV{signature_demande}" />
 <div hidden="hidden" aria-hidden="true"><label for="site_web"><:association_dons:site_web:></label><input type="text" name="site_web" id="site_web" value="" tabindex="-1" autocomplete="off" /></div>
-<INCLURE{fond=formulaires/inc-devenir_ami/champs,env} />
+[(#REM) Point de surcharge facultatif : reste indépendant de l'ordre des plugins. ]
+#SET{fond_champs,formulaires/inc-devenir_ami/champs}
+[(#CHEMIN{formulaires/inc-devenir_ami/champs-personnalises.html}|oui)#SET{fond_champs,formulaires/inc-devenir_ami/champs-personnalises}]
+<INCLURE{fond=#GET{fond_champs},env} />
 <p class="boutons"><button type="submit" class="submit"><:association_dons:continuer:></button></p>
 </div></form></div>
