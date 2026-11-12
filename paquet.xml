@@ -15,5 +15,6 @@
 	<pipeline nom="association_dons_evenement" inclure="association_dons_pipelines.php" />
 	<pipeline nom="ajouter_menus" inclure="association_dons_pipelines.php" />
 	<pipeline nom="afficher_contenu_objet" inclure="association_dons_pipelines.php" />
+	<pipeline nom="insert_head_css" inclure="association_dons_pipelines.php" />
 	<menu nom="association_donateurs" titre="association_dons:titre_donateurs" parent="association" action="association_donateurs" />
 </paquet>

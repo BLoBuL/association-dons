@@ -43,3 +43,8 @@ function association_dons_afficher_contenu_objet($flux) {
 	}
 	return $flux;
 }
+
+function association_dons_insert_head_css($head) {
+	include_spip('inc/filtres');
+	return $head . '\n<link rel="stylesheet" href="' . timestamp(find_in_path('css/association_dons_formulaire.css')) . '" type="text/css" />';
+}
