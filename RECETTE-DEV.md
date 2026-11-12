@@ -43,3 +43,20 @@ La seconde capture montre le haut de page, pas l’intégralité du formulaire. 
 Les profils temporaires d’authentification ont été fermés et retirés. La configuration antérieure aux captures est restaurée : aucune URL juridique fictive n’est laissée active. Contacts reste facultatif et inactif sur DEV ; ses fichiers sont disponibles pour une nouvelle recette.
 
 Avant mise en service client : renseigner les véritables informations de confidentialité, le journal et l’imputation des dons (l’imputation native DEV était vide), les moyens Bank et les instructions externes ; valider séparément encaissement et délivrabilité dans un cadre autorisé. Les tests ont capturé les messages et n’ont produit ni paiement réel ni envoi réel. Aucune garantie de réception email, aucun reçu fiscal, aucune production et aucun prélèvement automatique ne sont revendiqués.
+
+## Parcours public vers fiche donateur — 12 novembre 2026
+
+Code d’exécution du module : `883eb2e7ccfabc976efaf6fc7fbfcfe597a9853c`. Les surcharges de page du Core correspondent aux fichiers ciblés de `7fad24f` ; le Core actif n’a pas été remplacé dans son ensemble. Mode recette actif, notifications forcées à non.
+
+Recette avec `RECETTE PARCOURS COMPLET 20261112`, destinataire `.invalid`, montant libre 75 EUR et virement fictif. Identifiants synthétiques : donateur 37, suivi 34, don 91211022, écriture 260721230124. Toutes ces lignes ont été nettoyées après la recette.
+
+- Navigateur public : une soumission vide a affiché les erreurs nom/email/montant ; correction puis envoi du formulaire réel. Page de suivi : 75 EUR, en attente, bandeau et fil d’Ariane Blobul, aucun moyen de paiement réel.
+- Serveur SPIP : l’intention reste absente des anciens dons avant confirmation, sans transaction Bank. Chargement de la fiche et de ses coordonnées, recherche du donateur et rendu privé avant/après confirmation sans erreur de squelette.
+- Contrôleurs CVT privés : visiteur refusé, administrateur autorisé, preuve vide refusée ; confirmation avec preuve « RECETTE — aucun encaissement réel ». Le donateur devient à jour jusqu’au 31 décembre 2027. Une seconde confirmation conserve un seul don et une seule écriture.
+- Navigateur public après confirmation : montant conservé, message « Merci ! Votre soutien annuel est confirmé. », aucune identité exposée. Un jeton invalide affiche le refus sans montant ni identité.
+- Aucun événement email du module et aucun travail ajouté à la file pendant la confirmation. Aucune transaction Bank créée : 98 avant/après. Le mode recette interdit le transport email du module ; aucun paiement réel n’a été appelé.
+- Nettoyage vérifié : dons et quatre tables complémentaires vides, comptabilité revenue de 105 à ses 104 écritures initiales. Configuration de recette laissée active pour Julien. Profil technique temporaire supprimé.
+
+**Limite : recette visuelle du privé non validée.** L’authentification technique a réussi avec le helper officiel, mais le contrôle automatique a refusé l’ouverture du profil Chrome authentifié. Aucun autre procédé n’a été utilisé pour reproduire cette ouverture. Les vérifications privées ci-dessus portent sur les contrôleurs CVT et le rendu natif serveur sous identité technique administrateur ; elles ne constituent pas des clics dans une session privée du navigateur. Le parcours public est validé dans le navigateur ; la recette complète de bout en bout dans une interface authentifiée reste donc partielle.
+
+![Confirmation publique après règlement synthétique](docs/captures/parcours-confirmation-dev.png)
