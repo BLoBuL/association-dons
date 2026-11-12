@@ -6,7 +6,7 @@ $config_avant = lire_config('association_dons', null);
 $identite_avant = $GLOBALS['visiteur_session'] ?? array();
 $cles = array(); $r = array();
 try {
-	$config = association_dons_configuration(); $config['notifications'] = 'oui'; $config['fondation'] = 'oui';
+	$config = association_dons_configuration(); $config['notifications'] = 'oui'; $config['mode_recette'] = 'non'; $config['email_secretariat'] = 'recette-association@example.invalid'; $config['fondation'] = 'oui';
 	ecrire_config('association_dons', $config);
 	$donnees = array('nom' => 'RECETTE EMAILS', 'prenom' => 'Synthétique', 'email' => 'recette-emails@example.invalid', 'type_donateur' => 'particulier', 'consentement' => 'oui');
 	$cle = hash('sha256', random_bytes(32)); $cles[] = $cle;
@@ -28,6 +28,16 @@ try {
 	association_dons_confirmer_externe($s['id_don_suivi'], 'RECETTE confirmation Fondation');
 	$n_regle = (int)sql_getfetsel('id_don_notification', 'spip_asso_dons_notifications', 'id_donateur=' . $id . " AND type_notification='soutien_regle'");
 	$r['capture_confirmation'] = association_dons_envoyer_notification($n_regle);
+	$n_association = (int)sql_getfetsel('id_don_notification', 'spip_asso_dons_notifications', 'id_donateur=' . $id . " AND type_notification='soutien_regle_association'");
+	$r['deux_journaux_reglement'] = $n_association > 0 && $n_association !== $n_regle;
+	$r['capture_association'] = association_dons_envoyer_notification($n_association);
+	$m_association = end($GLOBALS['association_dons_emails_captures']);
+	$r['destinataire_association_configure'] = $m_association['destinataire'] === 'recette-association@example.invalid';
+	$r['lien_prive_sans_jeton'] = strpos($m_association['texte'], 'exec=association_donateur') !== false && strpos($m_association['texte'], 'jeton=') === false;
+	$r['contenu_association'] = strpos($m_association['texte'], 'recette-emails@example.invalid') !== false && strpos($m_association['texte'], '40,00 EUR') !== false && strpos($m_association['texte'], '2027') !== false;
+	pipeline('association_dons_evenement', array('args' => array('evenement' => 'soutien_regle', 'id_donateur' => $id, 'id_don_suivi' => $s['id_don_suivi']), 'data' => array()));
+	$r['rejeu_reglement_sans_doublon'] = sql_countsel('spip_asso_dons_notifications', 'id_donateur=' . $id . " AND type_notification IN ('soutien_regle','soutien_regle_association')") === 2 && !association_dons_envoyer_notification($n_regle) && !association_dons_envoyer_notification($n_association);
+
 	$n_rappel = association_dons_programmer_notification('rappel_paiement', $id, $s['id_don_suivi']);
 	$r['rappel_annule_si_paye'] = !association_dons_envoyer_notification($n_rappel) && sql_getfetsel('etat', 'spip_asso_dons_notifications', 'id_don_notification=' . $n_rappel) === 'annule';
 	sql_updateq('spip_asso_donateurs_periodes', array('annee' => 2025, 'date_debut' => '2025-01-01', 'date_fin' => '2025-12-31', 'statut' => 'a_jour'), 'id_donateur_periode=' . (int)$s['id_donateur_periode']);
@@ -45,8 +55,8 @@ try {
 	$r['renouvellement_meme_donateur'] = ($nouveau['suivi']['id_donateur'] ?? 0) == $id;
 	$r['deux_dons_meme_ami'] = sql_countsel('spip_asso_dons_suivi', 'id_donateur=' . $id) === 2;
 	$messages = $GLOBALS['association_dons_emails_captures'];
-	$r['emails_uniquement_captures'] = count($messages) === 3;
-	foreach ($messages as $m) { if ($m['destinataire'] !== 'recette-emails@example.invalid') { $r['emails_uniquement_captures'] = false; } }
+	$r['emails_uniquement_captures'] = count($messages) === 4;
+	foreach ($messages as $m) { if (!in_array($m['destinataire'], array('recette-emails@example.invalid', 'recette-association@example.invalid'), true)) { $r['emails_uniquement_captures'] = false; } }
 } finally {
 	$donateurs = array();
 	foreach (sql_allfetsel('*', 'spip_asso_dons_suivi', sql_in('cle_creation', $cles)) as $s) {

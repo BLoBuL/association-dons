@@ -10,7 +10,7 @@ $total_comptes = sql_countsel('spip_asso_comptes');
 try {
 	$config = association_dons_configuration();
 	$config['virement'] = $config['fondation'] = 'oui';
-	$config['notifications'] = 'non'; $config['journal_dons'] = '101'; $config['imputation_dons'] = '758';
+	$config['mode_recette'] = 'non'; $config['notifications'] = 'non'; $config['journal_dons'] = '101'; $config['imputation_dons'] = '758';
 	ecrire_config('association_dons', $config);
 	$GLOBALS['association_metas']['comptes'] = true;
 	$GLOBALS['association_metas']['pc_dons'] = '758';

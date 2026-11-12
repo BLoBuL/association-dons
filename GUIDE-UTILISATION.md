@@ -50,3 +50,9 @@ Vérifier la politique de confidentialité, les montants, la devise, les imputat
 Activer **Mode recette** dans la configuration. Les notifications du module sont alors forcées à « non », même si leur case est cochée. Les intentions Bank ne créent aucune transaction et la page de suivi remplace les paiements et liens externes par un avertissement. Les réglages Bank des autres modules restent inchangés. Utiliser des identités préfixées RECETTE et des emails `.invalid`.
 
 Pour tester le passage à « réglé », choisir le virement dans le formulaire, puis confirmer depuis l’administration avec une preuve « RECETTE — aucun encaissement ». Cela crée des données comptables synthétiques sur DEV. Les intentions Bank créées dans ce mode restent des essais sans transaction ; elles ne doivent pas être réutilisées après désactivation du mode recette.
+
+## Notifications après règlement
+
+Renseigner **Contact de l’association pour les règlements (email)**, puis activer les notifications. Cette adresse est obligatoire à l’activation ; aucun destinataire implicite ni BCC n’est ajouté. Le donateur reçoit la confirmation sur l’email de sa fiche, dans sa langue. Le contact reçoit un message distinct dans la langue du site, avec montant, référence, identité, mode et lien vers la fiche privée (sans lien public signé). Il s’agit d’une notification de règlement confirmé, pas d’un reçu fiscal.
+
+Le déclenchement suit un règlement Bank confirmé ou une confirmation administrative virement/Fondation. Une intention ou un simple retour navigateur ne déclenche aucune confirmation de règlement. Les deux messages sont journalisés séparément et dédupliqués ; un résultat de transport incertain n’est pas rejoué automatiquement. Le mode recette continue de désactiver tous les emails réels du module.

@@ -1,6 +1,9 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'notification_soutien_regle_association' => "Payment — association notification",
+	'mail_soutien_regle_association_sujet' => "@site@ — Support confirmed: @montant@ (ref. @reference@)",
+	'mail_soutien_regle_association_texte' => "Hello,\n\nSupport no. @reference@ for @montant@ has been confirmed.\nDonor: @nom@\nOrganisation: @organisation@\nEmail: @email@\nPayment method: @mode@\nValid until the end of @annee@.\n\nView the donor record in the administration:\n@url@\n\nThis notification is not a tax receipt.",
 	'suivi_soutien' => 'Your support status',
 	'section_identite' => 'Your contact details',
 	'section_preferences' => 'Your preferences and personal data',

@@ -40,6 +40,9 @@ try {
 	set_request('minimum', '40'); set_request('devise', 'ZZZ');
 	$resultats['devise_inconnue_refusee'] = isset(formulaires_configurer_association_dons_verifier_dist()['devise']);
 	set_request('devise', 'EUR');
+	set_request('notifications', 'oui'); set_request('email_secretariat', '');
+	$resultats['contact_obligatoire_pour_notifications'] = isset(formulaires_configurer_association_dons_verifier_dist()['email_secretariat']);
+	set_request('notifications', 'non');
 	$resultats['configuration_enregistree'] = !empty(formulaires_configurer_association_dons_traiter_dist()['message_ok']);
 } finally {
 	if ($id) { sql_delete('spip_asso_donateurs', 'id_donateur=' . (int)$id); }

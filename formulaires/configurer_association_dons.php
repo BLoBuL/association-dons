@@ -23,7 +23,7 @@ function formulaires_configurer_association_dons_verifier_dist() {
 	}
 	if (_request('fondation') === 'oui' && !_request('url_fondation')) { $erreurs['url_fondation'] = _T('association_dons:erreur_champ'); }
 	if (_request('virement') === 'oui' && !trim((string)_request('instructions_virement'))) { $erreurs['instructions_virement'] = _T('association_dons:erreur_champ'); }
-	if (_request('email_secretariat') && !filter_var(_request('email_secretariat'), FILTER_VALIDATE_EMAIL)) { $erreurs['email_secretariat'] = _T('association_dons:erreur_champ'); }
+	if ((_request('notifications') === 'oui' || _request('email_secretariat')) && !filter_var(_request('email_secretariat'), FILTER_VALIDATE_EMAIL)) { $erreurs['email_secretariat'] = _T('association_dons:erreur_champ'); }
 	foreach (array('preavis_renouvellement', 'delai_rappel') as $champ) {
 		if (!ctype_digit((string)_request($champ)) || (int)_request($champ) < 1 || (int)_request($champ) > 365) { $erreurs[$champ] = _T('association_dons:erreur_champ'); }
 	}

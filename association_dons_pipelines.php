@@ -25,6 +25,9 @@ function association_dons_association_dons_evenement($flux) {
 	$type = $flux['args']['evenement'] ?? '';
 	if (in_array($type, array('soutien_cree', 'soutien_regle'), true)) {
 		association_dons_programmer_notification($type, (int)$flux['args']['id_donateur'], (int)$flux['args']['id_don_suivi']);
+		if ($type === 'soutien_regle') {
+			association_dons_programmer_notification('soutien_regle_association', (int)$flux['args']['id_donateur'], (int)$flux['args']['id_don_suivi']);
+		}
 	}
 	return $flux;
 }

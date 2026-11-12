@@ -3,7 +3,8 @@ if (!defined('_ECRIRE_INC_VERSION')) { return; }
 include_spip('inc/association_dons_soutiens');
 
 function association_dons_programmer_notification($type, $id_donateur, $id_suivi = 0, $annee = 0) {
-	if (association_dons_configuration()['notifications'] !== 'oui' || !in_array($type, array('soutien_cree', 'soutien_regle', 'rappel_paiement', 'renouvellement'), true)) { return 0; }
+	if (association_dons_configuration()['notifications'] !== 'oui' || !in_array($type, array('soutien_cree', 'soutien_regle', 'soutien_regle_association', 'rappel_paiement', 'renouvellement'), true)) { return 0; }
+	if ($type === 'soutien_regle_association' && !filter_var(association_dons_configuration()['email_secretariat'], FILTER_VALIDATE_EMAIL)) { return 0; }
 	$donateur = association_dons_donateur($id_donateur);
 	if (!$donateur || $donateur['archive'] === 'oui') { return 0; }
 	$cle = $type . ':' . (int)$id_donateur . ':' . (int)$id_suivi . ':' . (int)$annee;
@@ -27,7 +28,7 @@ function association_dons_message_notification($notification) {
 	$type = $notification['type_notification'];
 	$suivi = $notification['id_don_suivi'] ? sql_fetsel('*', 'spip_asso_dons_suivi', 'id_don_suivi=' . (int)$notification['id_don_suivi']) : array();
 	if ($type !== 'renouvellement' && (!$suivi || (int)$suivi['id_donateur'] !== (int)$donateur['id_donateur'])) { return array(); }
-	if (($type === 'rappel_paiement' && $suivi['statut'] !== 'attente') || ($type === 'soutien_regle' && $suivi['statut'] !== 'regle')) { return array(); }
+	if (($type === 'rappel_paiement' && $suivi['statut'] !== 'attente') || (in_array($type, array('soutien_regle', 'soutien_regle_association'), true) && $suivi['statut'] !== 'regle')) { return array(); }
 	$annee = (int)$notification['annee'];
 	if ($type === 'renouvellement') {
 		$periode = sql_fetsel('*', 'spip_asso_donateurs_periodes', 'id_donateur=' . (int)$donateur['id_donateur'] . ' AND annee=' . $annee);
@@ -37,11 +38,18 @@ function association_dons_message_notification($notification) {
 		$url = association_dons_url_suivi($suivi);
 		$annee = (int)sql_getfetsel('annee', 'spip_asso_donateurs_periodes', 'id_donateur_periode=' . (int)$suivi['id_donateur_periode']);
 	}
-	$langue = in_array($donateur['langue'], array('fr', 'en'), true) ? $donateur['langue'] : 'fr';
+	$association = $type === 'soutien_regle_association';
+	$destinataire = $association ? association_dons_configuration()['email_secretariat'] : $donateur['email'];
+	if (!filter_var($destinataire, FILTER_VALIDATE_EMAIL)) { return array(); }
+	if ($association) { $url = url_absolue(generer_url_ecrire('association_donateur', 'id_donateur=' . (int)$donateur['id_donateur'])); }
+	$langue = $association ? ($GLOBALS['meta']['langue_site'] ?? 'fr') : $donateur['langue'];
+	$langue = in_array($langue, array('fr', 'en'), true) ? $langue : 'fr';
+	/* Langue du contact : langue du site ; langue du payeur : celle de sa fiche. */
 	lang_select($langue);
 	try {
 		$args = array('annee' => $annee, 'montant' => $suivi ? number_format((float)$suivi['montant'], 2, ',', ' ') . ' ' . $suivi['devise'] : '', 'url' => str_replace('&amp;', '&', $url), 'site' => textebrut($GLOBALS['meta']['nom_site'] ?? ''));
-		return array('destinataire' => $donateur['email'], 'sujet' => _T('association_dons:mail_' . $type . '_sujet', $args), 'texte' => _T('association_dons:mail_' . $type . '_texte', $args));
+		$args += array('reference' => (int)($suivi['id_don_suivi'] ?? 0), 'nom' => trim($donateur['prenom'] . ' ' . $donateur['nom']), 'email' => $donateur['email'], 'organisation' => $donateur['raison_sociale'], 'mode' => _T('association_dons:paiement_' . ($suivi['mode_paiement'] ?? 'bank')));
+		return array('destinataire' => $destinataire, 'sujet' => _T('association_dons:mail_' . $type . '_sujet', $args), 'texte' => _T('association_dons:mail_' . $type . '_texte', $args));
 	} finally { lang_select(); }
 }
 

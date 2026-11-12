@@ -2,6 +2,8 @@
 
 ## [À venir]
 
+- Notification de règlement confirmé au contact configuré de l’association, distincte de la confirmation au donateur : journaux et déduplication séparés, lien administratif sans jeton public, textes FR/EN. Adresse de contact obligatoire pour activer les notifications.
+
 - Formulaire public découpé en inclusions, classes SPIP/Saisies des champs et choix ; suppression de la feuille CSS spécifique et de son chargement global. Surcharge de composition possible dans le Core sans dupliquer les champs.
 
 - Mode recette du module : aucun bouton prestataire ni lien de paiement externe, aucune transaction Bank créée et notifications forcées à non, sans modifier Bank pour les autres modules.

@@ -1,6 +1,9 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'notification_soutien_regle_association' => "Règlement — information de l’association",
+	'mail_soutien_regle_association_sujet' => "@site@ — Soutien réglé : @montant@ (réf. @reference@)",
+	'mail_soutien_regle_association_texte' => "Bonjour,\n\nLe soutien n° @reference@ de @montant@ est confirmé.\nDonateur : @nom@\nOrganisation : @organisation@\nEmail : @email@\nMode : @mode@\nValidité : jusqu’à la fin de l’année @annee@.\n\nConsulter la fiche dans l’administration :\n@url@\n\nCette notification ne constitue pas un reçu fiscal.",
 	'suivi_soutien' => 'Suivi de votre soutien',
 	'section_identite' => 'Vos coordonnées',
 	'section_preferences' => 'Vos préférences et vos données',
@@ -23,7 +26,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'minimum' => 'Montant minimal du don libre', 'devise' => 'Devise', 'virement' => 'Proposer le paiement par virement',
 	'fondation' => 'Proposer le don via la Fondation Roi Baudouin', 'url_fondation' => 'URL du formulaire de la Fondation',
 	'instructions_virement' => 'Instructions de virement', 'url_confidentialite' => 'URL de la politique de protection des données',
-	'notifications' => 'Activer les emails de confirmation et de renouvellement', 'email_secretariat' => 'Email du secrétariat',
+	'notifications' => 'Activer les emails de confirmation et de renouvellement', 'email_secretariat' => 'Contact de l’association pour les règlements (email)',
 	'configuration_explication' => 'Les paiements en ligne utilisent les prestataires actifs de Bank. Les virements et les dons à la Fondation restent à confirmer dans l’administration.',
 	'journal_dons' => 'Code du journal comptable des dons encaissés directement',
 	'imputation_dons' => 'Code d’imputation comptable des dons encaissés directement',
