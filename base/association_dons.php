@@ -45,6 +45,18 @@ function association_dons_declarer_tables_principales($tables) {
 		'date_creation' => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
 		'maj' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 	), 'key' => array('PRIMARY KEY' => 'id_don_suivi', 'UNIQUE KEY id_don' => 'id_don', 'UNIQUE KEY cle_creation' => 'cle_creation', 'KEY id_donateur' => 'id_donateur', 'KEY id_donateur_periode' => 'id_donateur_periode', 'KEY id_transaction' => 'id_transaction'));
+	$tables['spip_asso_dons_notifications'] = array('field' => array(
+		'id_don_notification' => 'BIGINT NOT NULL',
+		'cle_evenement' => "VARCHAR(100) NOT NULL DEFAULT ''",
+		'type_notification' => "VARCHAR(30) NOT NULL DEFAULT ''",
+		'id_donateur' => 'BIGINT NOT NULL DEFAULT 0',
+		'id_don_suivi' => 'BIGINT NOT NULL DEFAULT 0',
+		'annee' => 'SMALLINT NOT NULL DEFAULT 0',
+		'etat' => "VARCHAR(20) NOT NULL DEFAULT 'prepare'",
+		'date_creation' => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
+		'date_envoi' => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
+		'maj' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+	), 'key' => array('PRIMARY KEY' => 'id_don_notification', 'UNIQUE KEY cle_evenement' => 'cle_evenement', 'KEY id_donateur' => 'id_donateur'));
 	return $tables;
 }
 
@@ -53,5 +65,6 @@ function association_dons_declarer_tables_interfaces($interfaces) {
 	$interfaces['table_des_tables']['asso_donateurs'] = 'asso_donateurs';
 	$interfaces['table_des_tables']['asso_donateurs_periodes'] = 'asso_donateurs_periodes';
 	$interfaces['table_des_tables']['asso_dons_suivi'] = 'asso_dons_suivi';
+	$interfaces['table_des_tables']['asso_dons_notifications'] = 'asso_dons_notifications';
 	return $interfaces;
 }

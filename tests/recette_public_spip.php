@@ -11,7 +11,7 @@ try {
 	$charger = formulaires_devenir_ami_charger_dist();
 	$cle = $charger['cle_demande'];
 	foreach (array('cle_demande', 'horodatage', 'signature_demande') as $champ) { set_request($champ, $charger[$champ]); }
-	foreach (array('nom' => 'RECETTE FORMULAIRE', 'prenom' => 'Synthétique', 'email' => 'recette-formulaire@example.invalid', 'type_donateur' => 'particulier', 'consentement' => 'oui', 'montant' => '40', 'mode_paiement' => 'virement') as $champ => $valeur) { set_request($champ, $valeur); }
+	foreach (array('nom' => 'RECETTE FORMULAIRE', 'prenom' => 'Synthétique', 'email' => 'recette-formulaire@example.invalid', 'type_donateur' => 'particulier', 'publication_nom' => 'non', 'consentement' => 'oui', 'montant' => '40', 'mode_paiement' => 'virement') as $champ => $valeur) { set_request($champ, $valeur); }
 	$r['validation_anonyme'] = !formulaires_devenir_ami_verifier_dist();
 	set_request('consentement', ''); $r['consentement_obligatoire'] = isset(formulaires_devenir_ami_verifier_dist()['consentement']); set_request('consentement', 'oui');
 	set_request('signature_demande', 'invalide'); $r['signature_invalide_refusee'] = isset(formulaires_devenir_ami_verifier_dist()['message_erreur']); set_request('signature_demande', $charger['signature_demande']);

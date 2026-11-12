@@ -10,6 +10,7 @@ function association_dons_configuration() {
 		'virement' => 'non', 'fondation' => 'non', 'url_fondation' => '',
 		'instructions_virement' => '', 'url_confidentialite' => '',
 		'journal_dons' => '',
+		'preavis_renouvellement' => '60', 'delai_rappel' => '14',
 		'notifications' => 'non', 'email_secretariat' => '',
 	), (array)lire_config('association_dons', array()));
 }

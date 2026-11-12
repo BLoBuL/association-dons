@@ -8,6 +8,7 @@ function association_dons_upgrade($meta, $cible) {
 		'1.1.0' => array(array('maj_tables', $tables)),
 		'1.2.0' => array(array('maj_tables', $tables)),
 		'1.3.0' => array(array('maj_tables', $tables)),
+		'1.4.0' => array(array('maj_tables', array_merge($tables, array('spip_asso_dons_notifications')))),
 	));
 }
 function association_dons_vider_tables($meta) { effacer_meta($meta); }

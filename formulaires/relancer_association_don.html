@@ -1,0 +1,7 @@
+<div class="formulaire_spip formulaire_relancer_association_don">
+[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
+[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+<form method="post" action="#ENV{action}"><div>#ACTION_FORMULAIRE{#ENV{action}}
+<div class="choix"><input type="checkbox" name="confirmer" id="confirmer_relance_#ENV{id}" value="oui" required="required" /><label for="confirmer_relance_#ENV{id}"><:association_dons:confirmer_relance:></label></div>
+<p class="boutons"><button type="submit" class="submit"><:association_dons:relancer:></button></p>
+</div></form></div>

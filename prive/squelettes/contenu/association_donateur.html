@@ -9,4 +9,7 @@
 <h2><:association_dons:dons:></h2>
 <B_dons><table class="spip liste"><thead><tr><th><:association_dons:don:></th><th><:association_dons:montant:></th><th><:association_dons:paiement:></th></tr></thead><tbody><BOUCLE_dons(ASSO_DONS_SUIVI){id_donateur}{par id_don_suivi}{inverse}><tr><td><a href="[(#URL_ECRIRE{edit_don}|parametre_url{id,#ID_DON})]">#ID_DON</a></td><td>[(#MONTANT|number_format{2,',',' '})] #DEVISE</td><td>#MODE_PAIEMENT — #STATUT</td></tr></BOUCLE_dons></tbody></table></B_dons><p><:association_dons:aucun_don:></p><//B_dons>
 <BOUCLE_reglements(ASSO_DONS_SUIVI){id_donateur}{statut=attente}{mode_paiement IN virement,fondation}><h3><:association_dons:don:> #ID_DON — [(#MONTANT|number_format{2,',',' '})] #DEVISE</h3>#FORMULAIRE_CONFIRMER_ASSOCIATION_DON{#ID_DON_SUIVI}</BOUCLE_reglements>
+<BOUCLE_relances(ASSO_DONS_SUIVI){id_donateur}{statut=attente}><h3><:association_dons:relancer:> — <:association_dons:don:> #ID_DON</h3>#FORMULAIRE_RELANCER_ASSOCIATION_DON{#ID_DON_SUIVI}</BOUCLE_relances>
+<h2><:association_dons:journal_notifications:></h2>
+<B_notifications><table class="spip liste"><thead><tr><th><:association_dons:notification:></th><th><:association_dons:etat:></th><th><:association_dons:date:></th></tr></thead><tbody><BOUCLE_notifications(ASSO_DONS_NOTIFICATIONS){id_donateur}{par id_don_notification}{inverse}><tr><td>#TYPE_NOTIFICATION</td><td>#ETAT</td><td>[(#DATE_CREATION|affdate)]</td></tr></BOUCLE_notifications></tbody></table></B_notifications><p><:association_dons:aucune_notification:></p><//B_notifications>
 </BOUCLE_donateur>

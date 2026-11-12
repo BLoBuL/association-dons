@@ -6,7 +6,9 @@ include_spip('inc/flock');
 
 /** Verrou local SPIP : nombre de fichiers borné, aucun verrou de site global. */
 function association_dons_verrou($cle) {
-	return spip_fopen_lock(_DIR_TMP . 'association-dons-' . substr(hash('sha256', $cle), 0, 2) . '.lock', 'c+', LOCK_EX);
+	$famille = explode('-', $cle, 2)[0];
+	if (!in_array($famille, array('creation', 'donateur', 'reglement', 'notification', 'envoi'), true)) { $famille = 'autre'; }
+	return spip_fopen_lock(_DIR_TMP . 'association-dons-' . $famille . '-' . substr(hash('sha256', $cle), 0, 2) . '.lock', 'c+', LOCK_EX);
 }
 
 function association_dons_jeton_renouvellement($id_donateur, $annee) {

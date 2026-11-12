@@ -15,7 +15,7 @@ verifier($tables['spip_asso_dons'] === $historique, 'Déclaration historique alt
 $neuves = association_dons_declarer_tables_principales(array());
 verifier(!isset($neuves['spip_asso_dons']), 'Déclaration concurrente de la table historique.');
 association_dons_upgrade('association_dons_base_version', '1.1.0');
-foreach (array('create', '1.1.0', '1.2.0', '1.3.0') as $etape) {
+foreach (array('create', '1.1.0', '1.2.0', '1.3.0', '1.4.0') as $etape) {
 	verifier($GLOBALS['etapes'][$etape][0][0] === 'maj_tables', 'Migration additive attendue.');
 	verifier(!in_array('spip_asso_dons', $GLOBALS['etapes'][$etape][0][1], true), 'Migration de la table historique interdite.');
 }

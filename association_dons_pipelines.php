@@ -14,3 +14,17 @@ function association_dons_bank_redirige_apres_retour_transaction($flux) {
 	if ($suivi) { $flux['data'] = association_dons_url_suivi($suivi); }
 	return $flux;
 }
+
+function association_dons_taches_generales_cron($taches) {
+	$taches['association_dons_quotidien'] = 86400;
+	return $taches;
+}
+
+function association_dons_association_dons_evenement($flux) {
+	include_spip('inc/association_dons_notifications');
+	$type = $flux['args']['evenement'] ?? '';
+	if (in_array($type, array('soutien_cree', 'soutien_regle'), true)) {
+		association_dons_programmer_notification($type, (int)$flux['args']['id_donateur'], (int)$flux['args']['id_don_suivi']);
+	}
+	return $flux;
+}
