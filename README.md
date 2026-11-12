@@ -29,7 +29,7 @@ Une intention en attente ne crée aucun ancien don ni écriture comptable. Aprè
 - Règlement et retour Bank : relecture de la transaction, validation du rattachement, du statut réglé, du montant et de la devise. Un simple retour navigateur ne confirme aucun règlement.
 - Événements métier via `association_dons_evenement`, traitement quotidien via le cron SPIP, courriels via la file native.
 - Contacts actif : choix d’une organisation existante et affichage des donateurs sur sa fiche. Sans Contacts, aucune requête sur ses tables n’est nécessaire.
-- CSS public limité au formulaire ; route Zcore lorsque disponible, page autonome de repli sinon.
+- Balisage public SPIP sans CSS propre au module ; route Zcore lorsque disponible, page autonome de repli sinon. Les champs sont découpés dans `formulaires/inc-devenir_ami/` ; le Core peut surcharger `champs.html` pour organiser les sections avec ses composants existants.
 
 Les clés d’intention et d’événement ainsi que les verrous locaux SPIP empêchent les doubles soumissions, règlements et envois. Une préparation incomplète ou un envoi incertain reste traçable et n’est pas automatiquement rejoué. La revue quotidienne reprend les transactions Bank confirmées dont la comptabilisation attendait une configuration valide, sans appeler le prestataire de paiement.
 

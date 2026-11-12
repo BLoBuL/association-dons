@@ -2,6 +2,8 @@
 
 ## [À venir]
 
+- Formulaire public découpé en inclusions, classes SPIP/Saisies des champs et choix ; suppression de la feuille CSS spécifique et de son chargement global. Surcharge de composition possible dans le Core sans dupliquer les champs.
+
 - Mode recette du module : aucun bouton prestataire ni lien de paiement externe, aucune transaction Bank créée et notifications forcées à non, sans modifier Bank pour les autres modules.
 
 - Compatibilité avec Association 6.x et Bank, intégration Contacts & Organisations facultative, sans redéclaration des anciens dons.

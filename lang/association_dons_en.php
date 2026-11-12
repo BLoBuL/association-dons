@@ -1,6 +1,8 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'section_identite' => 'Your contact details',
+	'section_preferences' => 'Your preferences and personal data',
 	'mode_recette' => 'Test mode: no module payment or email',
 	'recette_sans_paiement' => 'TEST: no payment can be made here and no module email will be sent. The support remains pending; test confirmations are performed in the administration.',
 	'titre_donateurs' => 'Friends and donors', 'ajouter_donateur' => 'Add a Friend', 'fiche_donateur' => 'Friend details', 'retour_liste' => 'Back to the list',

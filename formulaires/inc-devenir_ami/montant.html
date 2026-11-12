@@ -1,0 +1,6 @@
+<fieldset class="editer editer_montant saisie_radio[ (#ENV**{erreurs}|table_valeur{montant}|oui)erreur]"><legend class="editer-label"><:association_dons:montant_don:></legend>[<p class="erreur_message" role="alert">(#ENV**{erreurs}|table_valeur{montant})</p>]
+<BOUCLE_montants(DATA){source table,#ENV{_montants}}><div class="choix"><input type="radio" class="radio" name="montant" id="montant_#COMPTEUR_BOUCLE" value="#VALEUR"[(#ENV{montant}|=={#VALEUR}|oui) checked="checked"] /><label for="montant_#COMPTEUR_BOUCLE">#VALEUR [(#ENV{_config}|table_valeur{devise})]</label></div></BOUCLE_montants>
+<div class="choix"><input type="radio" class="radio" name="montant" id="montant_libre_choix" value="libre"[(#ENV{montant}|=={libre}|oui) checked="checked"] /><label for="montant_libre_choix"><:association_dons:montant_libre:></label></div>
+</fieldset>
+<div class="editer editer_montant_libre saisie_input"><label class="editer-label" for="montant_libre"><:association_dons:montant_minimum:> [(#ENV{_config}|table_valeur{minimum})] [(#ENV{_config}|table_valeur{devise})]</label><input type="number" class="text" name="montant_libre" id="montant_libre" value="#ENV{montant_libre}" step="0.01" min="[(#ENV{_config}|table_valeur{minimum})]" />
+</div>
