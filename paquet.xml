@@ -4,6 +4,7 @@
 	<licence lien="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</licence>
 	<necessite nom="association" compatibilite="[6.9.11;7.0.0[" />
 	<necessite nom="bank" compatibilite="[6.4.0;[" />
+	<necessite nom="saisies" compatibilite="[5.0.0;[" />
 	<utilise nom="contacts" compatibilite="[5.3.2;[" />
 	<utilise nom="zcore" compatibilite="[2.0.0;[" />
 	<pipeline nom="declarer_tables_principales" inclure="base/association_dons.php" />

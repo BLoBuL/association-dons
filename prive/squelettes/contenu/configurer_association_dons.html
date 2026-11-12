@@ -1,5 +1,6 @@
 #CACHE{0}
 [(#AUTORISER{gerer,associationdons}|sinon_interdire_acces)]
-<h1><:association_dons:configuration:></h1>
-<p><a href="#URL_ECRIRE{association_donateurs}"><:association_dons:retour_liste:></a></p>
-#FORMULAIRE_CONFIGURER_ASSOCIATION_DONS
+<h1 class="grostitre"><:association_dons:config_titre:></h1>
+<p><:association_dons:config_introduction:></p>
+<p><a href="#URL_ECRIRE{association_donateurs}"><:association_dons:retour_liste:></a> | <a href="[(#URL_PAGE{association_dons}|parametre_url{lang,#LANG})]"><:association_dons:config_ouvrir_formulaire:></a></p>
+#FORMULAIRE_CONFIGURER_ASSOCIATION_DONS{#ENV{config,recette}}

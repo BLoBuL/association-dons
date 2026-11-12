@@ -1,13 +1,10 @@
-<div class="formulaire_spip formulaire_configurer formulaire_configurer_association_dons">
-[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
-[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+<div class="formulaire_spip formulaire_asso formulaire_config_association formulaire_configurer_association_dons">
+[<p class="reponse_formulaire reponse_formulaire_ok" role="status">(#ENV*{message_ok})</p>]
+[<p class="reponse_formulaire reponse_formulaire_erreur" role="alert">(#ENV*{message_erreur})</p>]
+[(#ENV{mode_recette}|=={oui}|oui)<p class="notice"><:association_dons:config_recette_active:></p>]
+[(#ENV{_section}|=={comptabilite}|oui)<p class="explication"><:association_dons:config_comptabilite_explication:></p>]
+[(#ENV{_section}|=={paiements}|oui)<p class="explication"><:association_dons:configuration_explication:> <a href="#URL_ECRIRE{configurer_bank}"><:association_dons:config_ouvrir_bank:></a></p>]
 <form method="post" action="#ENV{action}"><div>#ACTION_FORMULAIRE{#ENV{action}}
-<p class="explication"><:association_dons:configuration_explication:></p>
-<div class="editer-groupe">
-<BOUCLE_champs(DATA){source table,#LISTE{montants,minimum,devise,url_fondation,url_confidentialite,email_secretariat,journal_dons,imputation_dons,preavis_renouvellement,delai_rappel}}>
-<div class="editer editer_#VALEUR"><label for="#VALEUR">[(#VAL{association_dons:}|concat{#VALEUR}|_T)]</label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{#VALEUR})</span>]<input type="text" class="text" name="#VALEUR" id="#VALEUR" value="[(#ENV{#VALEUR})]" /></div>
-</BOUCLE_champs>
-<div class="editer editer_instructions_virement"><label for="instructions_virement"><:association_dons:instructions_virement:></label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{instructions_virement})</span>]<textarea name="instructions_virement" id="instructions_virement" rows="4">#ENV{instructions_virement}</textarea></div>
-<BOUCLE_options(DATA){source table,#LISTE{virement,fondation,notifications,mode_recette}}><div class="editer editer_#VALEUR"><div class="choix"><input type="checkbox" name="#VALEUR" id="#VALEUR" value="oui"[(#ENV{#VALEUR}|=={oui}|oui) checked="checked"] /><label for="#VALEUR">[(#VAL{association_dons:}|concat{#VALEUR}|_T)]</label></div></div></BOUCLE_options>
-</div><p class="boutons"><button type="submit" class="submit"><:bouton_enregistrer:></button></p>
-</div></form></div>
+#GENERER_SAISIES{#ENV{_saisies}}
+</div><p class="boutons"><input type="submit" class="submit fondo" value="<:bouton_enregistrer|attribut_html:>" /></p>
+</form></div>

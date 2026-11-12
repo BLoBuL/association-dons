@@ -56,3 +56,9 @@ Pour tester le passage à « réglé », choisir le virement dans le formulaire,
 Renseigner **Contact de l’association pour les règlements (email)**, puis activer les notifications. Cette adresse est obligatoire à l’activation ; aucun destinataire implicite ni BCC n’est ajouté. Le donateur reçoit la confirmation sur l’email de sa fiche, dans sa langue. Le contact reçoit un message distinct dans la langue du site, avec montant, référence, identité, mode et lien vers la fiche privée (sans lien public signé). Il s’agit d’une notification de règlement confirmé, pas d’un reçu fiscal.
 
 Le déclenchement suit un règlement Bank confirmé ou une confirmation administrative virement/Fondation. Une intention ou un simple retour navigateur ne déclenche aucune confirmation de règlement. Les deux messages sont journalisés séparément et dédupliqués ; un résultat de transport incertain n’est pas rejoué automatiquement. Le mode recette continue de désactiver tous les emails réels du module.
+
+## Configuration par rubriques
+
+La page reprend la configuration d’Association : navigation latérale, formulaires Saisies, fieldsets et aides. Les six rubriques sont Mode recette et ouverture, Montants et devise, Moyens de paiement, Comptabilité, Protection des données, Notifications et rappels. Chaque rubrique enregistre uniquement ses champs et conserve les autres réglages. Le lien vers Bank ouvre sa configuration sans recopier ni modifier ses secrets.
+
+Le choix de notifications enregistré reste visible pendant la recette ; les envois sont toutefois neutralisés jusqu’à sa désactivation. La sortie du mode recette exige une politique de confidentialité et, si la comptabilité est active, les deux codes comptables. Un récapitulatif nomme les champs manquants et permet de les compléter dans leur rubrique avant de réessayer.
