@@ -1,6 +1,8 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'mode_recette' => 'Mode recette : aucun paiement ni email du module',
+	'recette_sans_paiement' => 'RECETTE : aucun paiement ne peut être effectué ici et aucun email du module ne sera envoyé. Le soutien reste en attente ; les confirmations de test se font dans l’administration.',
 	'titre_donateurs' => 'Amis et donateurs', 'ajouter_donateur' => 'Ajouter un Ami',
 	'fiche_donateur' => 'Fiche Ami', 'retour_liste' => 'Retour à la liste',
 	'type_donateur' => 'Type de soutien', 'particulier' => 'Particulier', 'organisation' => 'Organisation',

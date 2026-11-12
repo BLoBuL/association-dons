@@ -1,6 +1,8 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'mode_recette' => 'Test mode: no module payment or email',
+	'recette_sans_paiement' => 'TEST: no payment can be made here and no module email will be sent. The support remains pending; test confirmations are performed in the administration.',
 	'titre_donateurs' => 'Friends and donors', 'ajouter_donateur' => 'Add a Friend', 'fiche_donateur' => 'Friend details', 'retour_liste' => 'Back to the list',
 	'type_donateur' => 'Type of supporter', 'particulier' => 'Individual', 'organisation' => 'Organisation', 'nom' => 'Contact surname', 'prenom' => 'First name',
 	'raison_sociale' => 'Organisation name', 'email' => 'Email address', 'organisation_liee' => 'Linked organisation', 'aucune' => 'None',

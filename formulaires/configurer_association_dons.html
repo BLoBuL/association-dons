@@ -8,6 +8,6 @@
 <div class="editer editer_#VALEUR"><label for="#VALEUR">[(#VAL{association_dons:}|concat{#VALEUR}|_T)]</label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{#VALEUR})</span>]<input type="text" class="text" name="#VALEUR" id="#VALEUR" value="[(#ENV{#VALEUR})]" /></div>
 </BOUCLE_champs>
 <div class="editer editer_instructions_virement"><label for="instructions_virement"><:association_dons:instructions_virement:></label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{instructions_virement})</span>]<textarea name="instructions_virement" id="instructions_virement" rows="4">#ENV{instructions_virement}</textarea></div>
-<BOUCLE_options(DATA){source table,#LISTE{virement,fondation,notifications}}><div class="editer editer_#VALEUR"><div class="choix"><input type="checkbox" name="#VALEUR" id="#VALEUR" value="oui"[(#ENV{#VALEUR}|=={oui}|oui) checked="checked"] /><label for="#VALEUR">[(#VAL{association_dons:}|concat{#VALEUR}|_T)]</label></div></div></BOUCLE_options>
+<BOUCLE_options(DATA){source table,#LISTE{virement,fondation,notifications,mode_recette}}><div class="editer editer_#VALEUR"><div class="choix"><input type="checkbox" name="#VALEUR" id="#VALEUR" value="oui"[(#ENV{#VALEUR}|=={oui}|oui) checked="checked"] /><label for="#VALEUR">[(#VAL{association_dons:}|concat{#VALEUR}|_T)]</label></div></div></BOUCLE_options>
 </div><p class="boutons"><button type="submit" class="submit"><:bouton_enregistrer:></button></p>
 </div></form></div>

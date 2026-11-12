@@ -2,6 +2,8 @@
 
 ## [À venir]
 
+- Mode recette du module : aucun bouton prestataire ni lien de paiement externe, aucune transaction Bank créée et notifications forcées à non, sans modifier Bank pour les autres modules.
+
 - Compatibilité avec Association 6.x et Bank, intégration Contacts & Organisations facultative, sans redéclaration des anciens dons.
 - Schéma additif 1.4.0 : donateurs indépendants des adhérents, périodes, suivi des intentions/règlements et journal des notifications. Conservation des données à la désinstallation du module.
 - Formulaire public FR/EN sans compte, consentement et choix de publication, montants paramétrables et montant libre, liens signés de paiement et renouvellement.

@@ -44,3 +44,9 @@ Le journal distingue la préparation, le traitement en cours, l’acceptation pa
 ## Avant ouverture au client
 
 Vérifier la politique de confidentialité, les montants, la devise, les imputations comptables, les instructions de virement/Fondation, le prestataire Bank et l’envoi réel sur l’environnement autorisé. La recette DEV utilise des identités synthétiques, des emails `.invalid` capturés et aucun paiement réel. Elle ne valide ni un encaissement réel, ni la réception d’un email, ni un régime fiscal ou l’émission d’un reçu fiscal.
+
+## Recette sans paiement ni email
+
+Activer **Mode recette** dans la configuration. Les notifications du module sont alors forcées à « non », même si leur case est cochée. Les intentions Bank ne créent aucune transaction et la page de suivi remplace les paiements et liens externes par un avertissement. Les réglages Bank des autres modules restent inchangés. Utiliser des identités préfixées RECETTE et des emails `.invalid`.
+
+Pour tester le passage à « réglé », choisir le virement dans le formulaire, puis confirmer depuis l’administration avec une preuve « RECETTE — aucun encaissement ». Cela crée des données comptables synthétiques sur DEV. Les intentions Bank créées dans ce mode restent des essais sans transaction ; elles ne doivent pas être réutilisées après désactivation du mode recette.

@@ -81,7 +81,7 @@ function association_dons_creer_soutien($donnees, $montant, $mode, $cle, $renouv
 		sql_updateq('spip_asso_dons_suivi', array('id_donateur_periode' => $id_periode), 'id_don_suivi=' . $id_suivi);
 		// La table historique reste réservée aux dons effectivement confirmés.
 		// L'intention et son montant restent ici jusqu'au règlement.
-		if ($mode === 'bank') {
+		if ($mode === 'bank' && $config['mode_recette'] !== 'oui') {
 			$inserer = charger_fonction('inserer_transaction', 'bank');
 			$id_transaction = (int)$inserer($centimes / 100, array('devise' => $config['devise'], 'id_auteur' => 0, 'auteur_id' => 'association_dons:' . $id_suivi, 'auteur' => $donnees['email'], 'force' => false));
 			if (!$id_transaction || sql_updateq('spip_asso_dons_suivi', array('id_transaction' => $id_transaction), 'id_don_suivi=' . $id_suivi) === false) { return array('erreur' => 'preparation_incomplete'); }

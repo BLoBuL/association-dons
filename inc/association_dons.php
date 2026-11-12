@@ -5,15 +5,17 @@ include_spip('inc/config');
 include_spip('inc/autoriser');
 
 function association_dons_configuration() {
-	return array_merge(array(
+	$config = array_merge(array(
 		'montants' => '40;100', 'minimum' => '40', 'devise' => 'EUR',
 		'virement' => 'non', 'fondation' => 'non', 'url_fondation' => '',
 		'instructions_virement' => '', 'url_confidentialite' => '',
 		'journal_dons' => '',
 		'imputation_dons' => (string)($GLOBALS['association_metas']['pc_dons'] ?? ''),
 		'preavis_renouvellement' => '60', 'delai_rappel' => '14',
-		'notifications' => 'non', 'email_secretariat' => '',
+		'notifications' => 'non', 'email_secretariat' => '', 'mode_recette' => 'non',
 	), (array)lire_config('association_dons', array()));
+	if ($config['mode_recette'] === 'oui') { $config['notifications'] = 'non'; }
+	return $config;
 }
 
 function association_dons_donateur($id) {

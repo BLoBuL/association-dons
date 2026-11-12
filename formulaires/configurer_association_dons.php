@@ -37,7 +37,7 @@ function formulaires_configurer_association_dons_traiter_dist() {
 	if ($erreurs) { return array('message_erreur' => _T('association_dons:erreur_champ')); }
 	$config = array();
 	foreach (array_keys(association_dons_configuration()) as $champ) {
-		if (in_array($champ, array('virement', 'fondation', 'notifications'), true)) { $config[$champ] = _request($champ) === 'oui' ? 'oui' : 'non'; }
+		if (in_array($champ, array('virement', 'fondation', 'notifications', 'mode_recette'), true)) { $config[$champ] = _request($champ) === 'oui' ? 'oui' : 'non'; }
 		else { $config[$champ] = trim((string)_request($champ)); }
 	}
 	ecrire_config('association_dons', $config);
