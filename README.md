@@ -26,6 +26,8 @@ Attention : la désinstallation destructive d’Association possède sa propre s
 
 ## Vérification
 
+La [première recette sur DEV](RECETTE-DEV.md) valide l’installation SPIP du commit `0acfa06`, la conservation d’un don synthétique et les contraintes SQL. Les limites de cette recette y sont détaillées.
+
 `php tests/test_structure.php` vérifie les contrats de déclaration et le plan de migration avec un harnais local. Avec `ASSOCIATION_DONS_TEST_PORT` défini, le test crée puis supprime une base synthétique sur un serveur MariaDB local dédié (`127.0.0.1`, utilisateur de recette root sans mot de passe). Ne jamais pointer ce test sur un serveur de données réelles.
 
-Le test MariaDB exécute le DDL déclaré, contrôle la conservation d’un don, son rattachement sans adhérent ni organisation, et les contraintes d’unicité. Il ne remplace pas une recette du moteur `maj_plugin` dans SPIP avec Association et Bank actifs. Cette recette DEV et la compatibilité sur les différentes versions PHP/SPIP annoncées restent à effectuer avant livraison client.
+Le test MariaDB exécute le DDL déclaré, contrôle la conservation d’un don, son rattachement sans adhérent ni organisation, et les contraintes d’unicité. La recette du moteur `maj_plugin` dans SPIP avec Association et Bank actifs est décrite ci-dessus. La compatibilité sur les autres versions PHP/SPIP annoncées reste à vérifier avant livraison client.
