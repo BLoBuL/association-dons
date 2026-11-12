@@ -40,6 +40,9 @@ try {
 	$r['a_jour_apres_reglement'] = association_dons_statut(association_dons_donateur($suivi['id_donateur']), association_dons_periodes($suivi['id_donateur']), date('Y-m-d')) === 'a_jour';
 	pipeline('bank_traiter_reglement', $flux);
 	$r['comptabilite_unique'] = sql_countsel('spip_asso_comptes', "objet='don' AND id_objet=" . (int)$suivi['id_don']) === 1;
+	$compte_avant = sql_fetsel('*', 'spip_asso_comptes', 'id_compte=' . (int)$suivi['id_compte']);
+	pipeline('trig_bank_notifier_reglement', array('args' => array('id_transaction' => (int)$suivi['id_transaction'], 'succes' => true, 'type' => 'acte'), 'data' => ''));
+	$r['integration_association_sans_cotisation'] = sql_fetsel('*', 'spip_asso_comptes', 'id_compte=' . (int)$suivi['id_compte']) === $compte_avant;
 	foreach (array('virement', 'fondation') as $mode) {
 		$cle = hash('sha256', random_bytes(32)); $cles[] = $cle;
 		$externe = association_dons_creer_soutien($donnees, '40', $mode, $cle)['suivi'];

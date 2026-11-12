@@ -10,8 +10,8 @@ $qui = sql_fetsel('id_auteur,nom,statut,webmestre', 'spip_auteurs', "login='blob
 if (!$qui || $qui['statut'] !== '0minirezo') { throw new RuntimeException('Compte technique non établi.'); }
 $GLOBALS['visiteur_session'] = $qui;
 $resultats['admin_autorise'] = autoriser('gerer', 'associationdons');
-include_spip('inc/boutons');
-$menus = pipeline('ajouter_menus', array());
+include_spip('inc/bandeau');
+$menus = definir_barre_boutons();
 $resultats['menu_association'] = isset($menus['association']->sousmenu['association_donateurs']);
 $donnees = array('nom' => 'RECETTE AMIS API', 'prenom' => 'Synthétique', 'email' => 'recette-amis@example.invalid', 'type_donateur' => 'organisation', 'raison_sociale' => 'Organisation synthétique');
 $creation = association_dons_enregistrer_donateur(0, $donnees);
@@ -30,6 +30,14 @@ try {
 		$resultats['rendu_' . $page] = strlen($html) > 300 && strpos($html, 'erreur squelette') === false;
 	}
 	$resultats['erreurs_squelettes'] = count($GLOBALS['tableau_des_erreurs'] ?? array());
+	include_spip('formulaires/configurer_association_dons');
+	$config = association_dons_configuration();
+	foreach ($config as $champ => $valeur) { set_request($champ, $valeur); }
+	$resultats['configuration_valide'] = !formulaires_configurer_association_dons_verifier_dist();
+	set_request('minimum', '50');
+	$resultats['montant_propose_inferieur_minimum_refuse'] = isset(formulaires_configurer_association_dons_verifier_dist()['montants']);
+	set_request('minimum', '40'); set_request('devise', 'ZZZ');
+	$resultats['devise_inconnue_refusee'] = isset(formulaires_configurer_association_dons_verifier_dist()['devise']);
 } finally {
 	if ($id) { sql_delete('spip_asso_donateurs', 'id_donateur=' . (int)$id); }
 	$GLOBALS['visiteur_session'] = $ancienne_identite;

@@ -7,12 +7,16 @@ function formulaires_configurer_association_dons_charger_dist() {
 function formulaires_configurer_association_dons_verifier_dist() {
 	if (!autoriser('gerer', 'associationdons')) { return array('message_erreur' => _T('info_acces_interdit')); }
 	$erreurs = array();
+	$minimum = association_dons_centimes(_request('minimum'));
 	foreach (explode(';', (string)_request('montants')) as $montant) {
 		$centimes = association_dons_centimes($montant);
-		if (!$centimes) { $erreurs['montants'] = _T('association_dons:erreur_champ'); }
+		if (!$centimes || ($minimum && $centimes < $minimum)) { $erreurs['montants'] = _T('association_dons:erreur_champ'); }
 	}
 	if (!association_dons_centimes(_request('minimum'))) { $erreurs['minimum'] = _T('association_dons:erreur_champ'); }
-	if (!preg_match('/^[A-Z]{3}$/D', (string)_request('devise'))) { $erreurs['devise'] = _T('association_dons:erreur_champ'); }
+	include_spip('inc/bank');
+	$devises = bank_lister_devises();
+	$devise = (string)_request('devise');
+	if (!isset($devises[$devise]) || (int)$devises[$devise]['fraction'] !== 2) { $erreurs['devise'] = _T('association_dons:erreur_champ'); }
 	foreach (array('url_fondation', 'url_confidentialite') as $champ) {
 		$url = trim((string)_request($champ));
 		if ($url !== '' && (!filter_var($url, FILTER_VALIDATE_URL) || parse_url($url, PHP_URL_SCHEME) !== 'https')) { $erreurs[$champ] = _T('association_dons:erreur_champ'); }
