@@ -8,8 +8,5 @@
 	<pipeline nom="declarer_tables_principales" inclure="base/association_dons.php" />
 	<pipeline nom="declarer_tables_interfaces" inclure="base/association_dons.php" />
 	<pipeline nom="autoriser" inclure="association_dons_autorisations.php" />
-	<bouton id="association_donateurs" parent="association">
-		<libelle>association_dons:titre_donateurs</libelle>
-		<url>association_donateurs</url>
-	</bouton>
+	<menu nom="association_donateurs" titre="association_dons:titre_donateurs" parent="association" action="association_donateurs" />
 </paquet>
