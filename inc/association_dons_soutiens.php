@@ -78,9 +78,8 @@ function association_dons_creer_soutien($donnees, $montant, $mode, $cle, $renouv
 		if (!$id_periode) { $id_periode = (int)sql_insertq('spip_asso_donateurs_periodes', array_merge($bornes, array('id_donateur' => $id_donateur))); }
 		if (!$id_periode) { return array('erreur' => 'enregistrement'); }
 		sql_updateq('spip_asso_dons_suivi', array('id_donateur_periode' => $id_periode), 'id_don_suivi=' . $id_suivi);
-		$id_don = (int)sql_insertq('spip_asso_dons', array('date_don' => date('Y-m-d'), 'bienfaiteur' => trim(($donnees['prenom'] ?? '') . ' ' . $donnees['nom']), 'id_adherent' => 0, 'argent' => $centimes / 100, 'valeur' => '0', 'commentaire' => 'Soutien annuel ' . $bornes['annee']));
-		if (!$id_don) { return array('erreur' => 'enregistrement'); }
-		if (sql_updateq('spip_asso_dons_suivi', array('id_don' => $id_don), 'id_don_suivi=' . $id_suivi) === false) { return array('erreur' => 'enregistrement'); }
+		// La table historique reste réservée aux dons effectivement confirmés.
+		// L'intention et son montant restent ici jusqu'au règlement.
 		if ($mode === 'bank') {
 			$inserer = charger_fonction('inserer_transaction', 'bank');
 			$id_transaction = (int)$inserer($centimes / 100, array('devise' => $config['devise'], 'id_auteur' => 0, 'auteur_id' => 'association_dons:' . $id_suivi, 'auteur' => $donnees['email'], 'force' => false));
@@ -97,7 +96,7 @@ function association_dons_creer_soutien($donnees, $montant, $mode, $cle, $renouv
 function association_dons_confirmer_bank($id_transaction) {
 	$suivi = sql_fetsel('*', 'spip_asso_dons_suivi', 'id_transaction=' . (int)$id_transaction);
 	$transaction = sql_fetsel('*', 'spip_transactions', 'id_transaction=' . (int)$id_transaction);
-	if (!$suivi || !$transaction || $suivi['mode_paiement'] !== 'bank' || $transaction['statut'] !== 'ok' || $transaction['reglee'] !== 'oui' || $transaction['devise'] !== $suivi['devise'] || (float)$transaction['montant_regle'] < (float)$suivi['montant']) { return false; }
+	if (!$suivi || !$transaction || $transaction['auteur_id'] !== 'association_dons:' . $suivi['id_don_suivi'] || $suivi['mode_paiement'] !== 'bank' || $transaction['statut'] !== 'ok' || $transaction['reglee'] !== 'oui' || $transaction['devise'] !== $suivi['devise'] || (float)$transaction['montant_regle'] < (float)$suivi['montant']) { return false; }
 	return association_dons_reglement($suivi['id_don_suivi'], 'Bank #' . (int)$id_transaction);
 }
 
@@ -118,6 +117,16 @@ function association_dons_reglement($id_suivi, $preuve) {
 		if (!$suivi) { return false; }
 		if ($suivi['statut'] === 'regle') {
 			return sql_updateq('spip_asso_donateurs_periodes', array('statut' => 'a_jour'), 'id_donateur_periode=' . (int)$suivi['id_donateur_periode']) !== false;
+		}
+		if (!$suivi['id_don']) {
+			$donateur = association_dons_donateur($suivi['id_donateur']);
+			if (!$donateur) { return false; }
+			$reference = 'association_dons:soutien:' . (int)$id_suivi;
+			$reprises = sql_allfetsel('id_don', 'spip_asso_dons', 'commentaire=' . sql_quote($reference));
+			if (count($reprises) > 1) { return false; }
+			$id_don = $reprises ? (int)$reprises[0]['id_don'] : (int)sql_insertq('spip_asso_dons', array('date_don' => date('Y-m-d'), 'bienfaiteur' => trim($donateur['prenom'] . ' ' . $donateur['nom']), 'id_adherent' => 0, 'argent' => $suivi['montant'], 'valeur' => '0', 'commentaire' => $reference));
+			if (!$id_don || sql_updateq('spip_asso_dons_suivi', array('id_don' => $id_don), 'id_don_suivi=' . (int)$id_suivi) === false) { return false; }
+			$suivi['id_don'] = $id_don;
 		}
 		$id_compte = 0;
 		// Un don à la Fondation n'est pas une recette sur le compte bancaire de l'association.

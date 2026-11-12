@@ -1,0 +1,3 @@
+#CACHE{0}
+[(#AUTORISER{gerer,associationdons}|sinon_interdire_acces)]
+<B_amis><section><h2><:association_dons:titre_donateurs:></h2><ul><BOUCLE_amis(ASSO_DONATEURS){id_organisation}{par nom}><li><a href="[(#URL_ECRIRE{association_donateur}|parametre_url{id_donateur,#ID_DONATEUR})]">[(#PRENOM|textebrut|entites_html)] [(#NOM|textebrut|entites_html)]</a></li></BOUCLE_amis></ul></section></B_amis>

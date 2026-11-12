@@ -28,3 +28,18 @@ function association_dons_association_dons_evenement($flux) {
 	}
 	return $flux;
 }
+
+function association_dons_ajouter_menus($menus) {
+	if (isset($menus['association']) && autoriser('gerer', 'associationdons')) {
+		$classe = class_exists('Spip\\Admin\\Bouton') ? 'Spip\\Admin\\Bouton' : 'Bouton';
+		$menus['association']->sousmenu['association_donateurs'] = new $classe(find_in_theme('images/auteur-xx.svg'), _T('association_dons:titre_donateurs'), generer_url_ecrire('association_donateurs'));
+	}
+	return $menus;
+}
+
+function association_dons_afficher_contenu_objet($flux) {
+	if (($flux['args']['type'] ?? '') === 'organisation' && test_plugin_actif('contacts') && autoriser('gerer', 'associationdons')) {
+		$flux['data'] .= recuperer_fond('prive/squelettes/inclure/association_dons_organisation_fiche', array('id_organisation' => (int)$flux['args']['id_objet']));
+	}
+	return $flux;
+}

@@ -35,7 +35,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'devenir_ami' => 'Devenir Ami', 'presentation' => 'Soutenez nos actions par un don annuel, sans adhésion ni accès à l’Espace Membres.',
 	'votre_soutien' => 'Votre soutien', 'soutien_confirme' => 'Merci ! Votre soutien annuel est confirmé.',
 	'reglement_attendu' => 'Votre demande est enregistrée. Votre soutien sera confirmé après réception et validation du règlement.',
-	'reference_don' => 'Référence à indiquer : don', 'fondation_explication' => 'Poursuivez votre don sur le site de la Fondation. Le secrétariat confirmera ensuite sa réception. Les conditions fiscales sont précisées par la Fondation.',
+	'reference_don' => 'Référence à indiquer : soutien', 'fondation_explication' => 'Poursuivez votre don sur le site de la Fondation. Le secrétariat confirmera ensuite sa réception. Les conditions fiscales sont précisées par la Fondation.',
 	'aller_fondation' => 'Accéder au formulaire de la Fondation',
 	'preavis_renouvellement' => 'Invitation au renouvellement : nombre de jours avant la fin de validité',
 	'delai_rappel' => 'Rappel de paiement : nombre de jours après la demande',
@@ -51,4 +51,6 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'relance_presente' => 'Le rappel figure dans le journal des notifications. Une relance déjà enregistrée n’est pas envoyée une deuxième fois.',
 	'notifications_desactivees' => 'Les notifications sont désactivées ou le donateur est archivé.',
 	'journal_notifications' => 'Journal des notifications', 'notification' => 'Notification', 'etat' => 'État', 'date' => 'Date', 'aucune_notification' => 'Aucune notification enregistrée.',
+	'notification_soutien_cree' => 'Demande de soutien', 'notification_soutien_regle' => 'Confirmation du don', 'notification_rappel_paiement' => 'Rappel de paiement', 'notification_renouvellement' => 'Invitation au renouvellement',
+	'envoi_prepare' => 'À envoyer', 'envoi_en_cours' => 'En cours — à vérifier si interrompu', 'envoi_accepte' => 'Accepté par le transport', 'envoi_capture' => 'Test capturé, non envoyé', 'envoi_incertain' => 'Résultat à vérifier avant tout nouvel envoi', 'envoi_annule' => 'Annulé',
 );

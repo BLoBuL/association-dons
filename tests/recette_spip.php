@@ -10,6 +10,9 @@ $qui = sql_fetsel('id_auteur,nom,statut,webmestre', 'spip_auteurs', "login='blob
 if (!$qui || $qui['statut'] !== '0minirezo') { throw new RuntimeException('Compte technique non établi.'); }
 $GLOBALS['visiteur_session'] = $qui;
 $resultats['admin_autorise'] = autoriser('gerer', 'associationdons');
+include_spip('inc/boutons');
+$menus = pipeline('ajouter_menus', array());
+$resultats['menu_association'] = isset($menus['association']->sousmenu['association_donateurs']);
 $donnees = array('nom' => 'RECETTE AMIS API', 'prenom' => 'Synthétique', 'email' => 'recette-amis@example.invalid', 'type_donateur' => 'organisation', 'raison_sociale' => 'Organisation synthétique');
 $creation = association_dons_enregistrer_donateur(0, $donnees);
 $id = $creation['id_donateur'] ?? 0;
