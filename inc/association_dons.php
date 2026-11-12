@@ -9,6 +9,7 @@ function association_dons_configuration() {
 		'montants' => '40;100', 'minimum' => '40', 'devise' => 'EUR',
 		'virement' => 'non', 'fondation' => 'non', 'url_fondation' => '',
 		'instructions_virement' => '', 'url_confidentialite' => '',
+		'journal_dons' => '',
 		'notifications' => 'non', 'email_secretariat' => '',
 	), (array)lire_config('association_dons', array()));
 }

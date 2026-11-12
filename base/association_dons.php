@@ -29,7 +29,7 @@ function association_dons_declarer_tables_principales($tables) {
 	), 'key' => array('PRIMARY KEY' => 'id_donateur_periode', 'UNIQUE KEY donateur_annee' => 'id_donateur,annee'));
 	$tables['spip_asso_dons_suivi'] = array('field' => array(
 		'id_don_suivi' => 'BIGINT NOT NULL',
-		'id_don' => 'BIGINT NOT NULL DEFAULT 0',
+		'id_don' => 'BIGINT DEFAULT NULL',
 		'id_donateur' => 'BIGINT NOT NULL DEFAULT 0',
 		'id_donateur_periode' => 'BIGINT NOT NULL DEFAULT 0',
 		'id_transaction' => 'BIGINT NOT NULL DEFAULT 0',
@@ -40,6 +40,9 @@ function association_dons_declarer_tables_principales($tables) {
 		'id_compte' => 'BIGINT NOT NULL DEFAULT 0',
 		'date_reglement' => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
 		'cle_creation' => 'VARCHAR(64) DEFAULT NULL',
+		'empreinte_demande' => "VARCHAR(64) NOT NULL DEFAULT ''",
+		'preuve_reglement' => "VARCHAR(255) NOT NULL DEFAULT ''",
+		'date_creation' => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
 		'maj' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 	), 'key' => array('PRIMARY KEY' => 'id_don_suivi', 'UNIQUE KEY id_don' => 'id_don', 'UNIQUE KEY cle_creation' => 'cle_creation', 'KEY id_donateur' => 'id_donateur', 'KEY id_donateur_periode' => 'id_donateur_periode', 'KEY id_transaction' => 'id_transaction'));
 	return $tables;

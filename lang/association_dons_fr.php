@@ -20,4 +20,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'instructions_virement' => 'Instructions de virement', 'url_confidentialite' => 'URL de la politique de protection des données',
 	'notifications' => 'Activer les emails de confirmation et de renouvellement', 'email_secretariat' => 'Email du secrétariat',
 	'configuration_explication' => 'Les paiements en ligne utilisent les prestataires actifs de Bank. Les virements et les dons à la Fondation restent à confirmer dans l’administration.',
+	'journal_dons' => 'Code du journal comptable des dons encaissés directement',
+	'confirmer_reglement' => 'Confirmer le règlement externe', 'preuve_reglement' => 'Référence du règlement ou de la confirmation reçue',
+	'reglement_ok' => 'Le règlement a été confirmé.', 'erreur_reglement' => 'Le règlement n’a pas été confirmé. Vérifiez la référence et la configuration comptable.',
 );
