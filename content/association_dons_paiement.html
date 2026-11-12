@@ -1,0 +1,14 @@
+#CACHE{0}
+<section class="page page_association_dons_paiement"><h1 class="h1"><:association_dons:votre_soutien:></h1>
+#SET{suivi,#ENV{id_suivi,0}|association_dons_suivi_public{#ENV{jeton,''}}}
+[(#GET{suivi}|non)<p class="error"><:association_dons:lien_invalide:></p>]
+[(#GET{suivi}|oui)
+<p>[(#GET{suivi}|table_valeur{montant}|number_format{2,',',' '})] [(#GET{suivi}|table_valeur{devise})]</p>
+[(#GET{suivi}|table_valeur{statut}|=={regle}|oui)<p class="success"><:association_dons:soutien_confirme:></p>]
+[(#GET{suivi}|table_valeur{statut}|=={regle}|non)
+<p><:association_dons:reglement_attendu:></p>
+[(#GET{suivi}|table_valeur{mode_paiement}|=={bank}|oui)<INCLURE{fond=modeles/payer_acte,id_transaction=#GET{suivi}|table_valeur{id_transaction}} />]
+[(#GET{suivi}|table_valeur{mode_paiement}|=={virement}|oui)<p>[(#CONFIG{association_dons/instructions_virement}|textebrut|entites_html|nl2br)]</p><p><:association_dons:reference_don:> [(#GET{suivi}|table_valeur{id_don})]</p>]
+[(#GET{suivi}|table_valeur{mode_paiement}|=={fondation}|oui)<p><:association_dons:fondation_explication:></p><p><a href="[(#CONFIG{association_dons/url_fondation}|attribut_html)]" rel="noreferrer noopener"><:association_dons:aller_fondation:></a></p>]
+]]
+</section>
