@@ -1,0 +1,3 @@
+#CACHE{0}
+[(#AUTORISER{gerer,associationdons}|sinon_interdire_acces)]
+<div class="editer editer_id_organisation"><label for="id_organisation"><:association_dons:organisation_liee:></label><select id="id_organisation" name="id_organisation"><option value="0"><:association_dons:aucune:></option><BOUCLE_organisations(ORGANISATIONS){par nom}><option value="#ID_ORGANISATION"[(#ENV{id_organisation}|=={#ID_ORGANISATION}|oui) selected="selected"]>#NOM</option></BOUCLE_organisations></select></div>

@@ -1,4 +1,4 @@
-<paquet prefix="association_dons" categorie="divers" version="4.0.0" etat="dev" compatibilite="[4.0.0;4.*]" schema="1.1.0">
+<paquet prefix="association_dons" categorie="divers" version="4.0.0" etat="dev" compatibilite="[4.0.0;4.*]" schema="1.2.0">
 	<nom>Association - Dons</nom>
 	<auteur>Julien Bellegueulle</auteur>
 	<licence lien="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</licence>
@@ -7,4 +7,9 @@
 	<utilise nom="contacts" compatibilite="[5.3.2;[" />
 	<pipeline nom="declarer_tables_principales" inclure="base/association_dons.php" />
 	<pipeline nom="declarer_tables_interfaces" inclure="base/association_dons.php" />
+	<pipeline nom="autoriser" inclure="association_dons_autorisations.php" />
+	<bouton id="association_donateurs" parent="association">
+		<libelle>association_dons:titre_donateurs</libelle>
+		<url>association_donateurs</url>
+	</bouton>
 </paquet>
