@@ -1,5 +1,9 @@
+[(#REM) Composition facultative du site ; le plugin garde sa page autonome. ]
+[(#CHEMIN{content/association_dons-personnalise.html}|oui)<INCLURE{fond=content/association_dons-personnalise,env} />]
+[(#CHEMIN{content/association_dons-personnalise.html}|non)
 <section class="page page_association_dons">
 <h1 class="h1"><:association_dons:devenir_ami:></h1>
 <p><:association_dons:presentation:></p>
 #FORMULAIRE_DEVENIR_AMI{#ENV{id_donateur,0},#ENV{annee,0},#ENV{jeton,''}}
 </section>
+]
