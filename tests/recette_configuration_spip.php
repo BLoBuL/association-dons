@@ -23,8 +23,9 @@ try {
  set_request('notifications','oui');$r['contact_obligatoire']=isset(formulaires_configurer_association_dons_verifier_dist('notifications')['email_secretariat']);
  set_request('notifications','non');set_request('delai_rappel','0');$r['delai_zero_refuse']=isset(formulaires_configurer_association_dons_verifier_dist('notifications')['delai_rappel']);
  $c=association_dons_config_valeurs();$c['url_confidentialite']='';$c['journal_dons']='';$c['imputation_dons']='';ecrire_config('association_dons',$c);set_request('mode_recette','non');
- $e=formulaires_configurer_association_dons_verifier_dist('recette');$r['ouverture_incomplete_refusee']=isset($e['url_confidentialite'])&&!empty($e['message_erreur']);
- set_request('url_confidentialite','http://example.invalid');$r['url_non_https_refusee']=isset(formulaires_configurer_association_dons_verifier_dist('confidentialite')['url_confidentialite']);
+ $e=formulaires_configurer_association_dons_verifier_dist('recette');$r['ouverture_incomplete_refusee']=isset($e['page_confidentialite'])&&!empty($e['message_erreur']);
+ set_request('page_confidentialite','page-inexistante-recette');$r['page_inconnue_refusee']=isset(formulaires_configurer_association_dons_verifier_dist('confidentialite')['page_confidentialite']);
+ $charge=formulaires_configurer_association_dons_charger_dist('confidentialite');$r['selecteur_page_unique']=$charge['_saisies'][0]['saisies'][0]['saisie']==='selection';
  $r['erreurs_squelettes']=count($GLOBALS['tableau_des_erreurs']??array());
 } finally {
  if($avant===null){effacer_config('association_dons');}else{ecrire_config('association_dons',$avant);}$GLOBALS['visiteur_session']=$identite;

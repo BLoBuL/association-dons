@@ -21,7 +21,9 @@ function formulaires_configurer_association_dons_saisies_dist($section='') {
   foreach($champs as $champ) {
    $options=array('nom'=>$champ,'label'=>_T('association_dons:'.$champ),'explication'=>_T('association_dons:aide_'.$champ));
    $type='input';
-   if($champ==='prestataires') {
+   if($champ==='page_confidentialite') {
+    $type='selection'; $options['data']=association_dons_pages_uniques();
+   } elseif($champ==='prestataires') {
     $type='checkbox'; $options['data']=association_dons_prestataires_labels();
    } elseif(in_array($champ,array('mode_recette','notifications','virement','fondation'),true)) {
     $type='case'; $options['label_case']=$options['label']; unset($options['label']); $options['valeur_oui']='oui'; $options['valeur_non']='non';
@@ -56,10 +58,12 @@ function association_dons_config_soumission($section) {
   elseif(in_array($champ,array('mode_recette','notifications','virement','fondation'),true)) { $config[$champ]=$valeur==='oui'?'oui':'non'; }
   else { $config[$champ]=is_scalar($valeur)?trim((string)$valeur):''; }
  }
+ if ($section==='confidentialite' || $section==='') { $config['url_confidentialite']=''; }
  return $config;
 }
 function association_dons_config_erreurs($valeurs) {
 	$erreurs = array();
+	if ($valeurs['page_confidentialite']!=='' && !array_key_exists($valeurs['page_confidentialite'],association_dons_pages_uniques())) { $erreurs['page_confidentialite']=_T('association_dons:erreur_champ'); }
 	if ($valeurs['prestataires']!==null && (!is_array($valeurs['prestataires']) || !$valeurs['prestataires'] || array_diff($valeurs['prestataires'],array_keys(association_dons_prestataires_disponibles())))) { $erreurs['prestataires']=_T('association_dons:erreur_prestataires'); }
 	$minimum = association_dons_centimes($valeurs['minimum']);
 	$vus = array();
@@ -87,7 +91,7 @@ function association_dons_config_erreurs($valeurs) {
 		if ($valeurs[$champ] !== '' && !preg_match('/^[a-zA-Z0-9_.-]{1,30}$/D', (string)$valeurs[$champ])) { $erreurs[$champ] = _T('association_dons:erreur_champ'); }
 	}
 	if ($valeurs['mode_recette'] !== 'oui') {
-		if (!trim((string)$valeurs['url_confidentialite'])) { $erreurs['url_confidentialite'] = _T('association_dons:config_requis_ouverture'); }
+		if (!$valeurs['page_confidentialite'] && !trim((string)$valeurs['url_confidentialite'])) { $erreurs['page_confidentialite'] = _T('association_dons:config_requis_ouverture'); }
 		if (!empty($GLOBALS['association_metas']['comptes'])) {
 			foreach (array('journal_dons', 'imputation_dons') as $champ) {
 				if (!trim((string)$valeurs[$champ])) { $erreurs[$champ] = _T('association_dons:config_requis_ouverture'); }

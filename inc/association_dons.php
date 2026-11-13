@@ -8,12 +8,16 @@ function association_dons_configuration() {
 	$config = array_merge(array(
 		'prestataires' => null, 'montants' => '40;100', 'minimum' => '40', 'devise' => 'EUR',
 		'virement' => 'non', 'fondation' => 'non', 'url_fondation' => '',
-		'instructions_virement' => '', 'url_confidentialite' => '',
+		'instructions_virement' => '', 'url_confidentialite' => '', 'page_confidentialite' => '',
 		'journal_dons' => '',
 		'imputation_dons' => (string)($GLOBALS['association_metas']['pc_dons'] ?? ''),
 		'preavis_renouvellement' => '60', 'delai_rappel' => '14',
 		'notifications' => 'non', 'email_secretariat' => '', 'mode_recette' => 'non',
 	), (array)lire_config('association_dons', array()));
+	if ($config['page_confidentialite'] !== '') {
+		$id_article = sql_getfetsel('id_article', 'spip_articles', array('id_rubrique=-1', "statut='publie'", sql_quote($config['page_confidentialite']).'=page'));
+		$config['url_confidentialite'] = $id_article ? generer_url_entite($id_article, 'article', '', '', true) : '';
+	}
 	if ($config['mode_recette'] === 'oui') { $config['notifications'] = 'non'; }
 	return $config;
 }
@@ -94,9 +98,19 @@ function association_dons_config_sections() {
   'montants' => array('montants','minimum','devise'),
   'paiements' => array('prestataires'),
   'comptabilite' => array('journal_dons','imputation_dons'),
-  'confidentialite' => array('url_confidentialite'),
+  'confidentialite' => array('page_confidentialite'),
   'notifications' => array('notifications','email_secretariat','delai_rappel','preavis_renouvellement'),
  );
  if (!defined('_DIR_PLUGIN_ASSOCIATION') && !defined('_DIR_PLUGIN_ASSOCIATION_COMPTA')) { unset($sections['comptabilite']); }
  return $sections;
+}
+
+/** Pages uniques publiées, selon le même périmètre que la configuration Association. */
+function association_dons_pages_uniques() {
+ include_spip('inc/filtres');
+ $pages=array();
+ foreach (sql_allfetsel('page,titre','spip_articles',"id_rubrique=-1 AND statut='publie' AND page!=''",'', 'titre') as $article) {
+  $pages[$article['page']]=supprimer_numero($article['titre']);
+ }
+ return $pages;
 }
