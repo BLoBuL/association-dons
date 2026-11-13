@@ -9,9 +9,9 @@
 <tr class="[(#COMPTEUR_BOUCLE|alterner{row_odd,row_even})]">
 <td class="date">[(#VALEUR{date_don}|affdate)]</td>
 <td class="titre principale"><a href="[(#URL_ECRIRE{edit_don}|parametre_url{id,#VALEUR{id_don}})]">[(#VALEUR{bienfaiteur}|textebrut|entites_html)]</a></td>
-<td class="montant">[(#VALEUR{argent}|number_format{2,',',' '})] €</td>
+<td class="montant">[(#VALEUR{argent}|floatval|number_format{2,',',' '})] €</td>
 <td>[(#VALEUR{colis}|textebrut|entites_html)]</td>
-<td class="montant">[(#VALEUR{valeur}|number_format{2,',',' '})] €</td>
+<td class="montant">[(#VALEUR{valeur}|floatval|number_format{2,',',' '})] €</td>
 <td>[(#VALEUR{contrepartie}|textebrut|entites_html)]</td>
 <td class="id">#VALEUR{id_don}</td></tr>
 </BOUCLE_historique>

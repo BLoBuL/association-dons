@@ -1,4 +1,7 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
-// La page historique est rendue par le contrôleur de squelettes natif du privé.
-include_spip('exec/fond');
+
+/** Déléguer la page historique au contrôleur natif des squelettes privés. */
+function exec_dons_dist() {
+ include_spip('exec/fond');
+}
