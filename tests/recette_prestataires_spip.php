@@ -27,6 +27,10 @@ try {
  $flux=array('args'=>array('succes'=>'wait','id_transaction'=>$s['id_transaction'],'row'=>$t),'data'=>'fallback');
  $r['redirection_twikey']=pipeline('bank_redirige_apres_retour_transaction',$flux)===$cfg['url_fondation'];
  $r['aucun_don_au_retour']=!sql_getfetsel('id_don','spip_asso_dons_suivi','id_don_suivi='.(int)$s['id_don_suivi']);
+ include_spip('formulaires/confirmer_association_don');include_spip('formulaires/relancer_association_don');
+ $GLOBALS['visiteur_session']=sql_fetsel('id_auteur,nom,statut,webmestre','spip_auteurs',"login='blobul_ai'");
+ foreach(array('confirmer_association_don'=>'preuve_reglement','relancer_association_don'=>'confirmer')as$form=>$champ){$charge=('formulaires_'.$form.'_charger_dist')($s['id_don_suivi']);$html=recuperer_fond('formulaires/'.$form,$charge);$r[$form.'_saisies_rendues']=strpos($html,'name="'.$champ.'"')!==false;set_request($champ,'');$r[$form.'_vide_refuse']=!empty(('formulaires_'.$form.'_verifier_dist')($s['id_don_suivi']));}
+ $GLOBALS['visiteur_session']=array();
  $r['manuel_disponible']=association_dons_confirmation_manuelle_possible($s['id_don_suivi']);
  $r['visiteur_ne_confirme_pas']=!association_dons_confirmer_externe($s['id_don_suivi'],'preuve');
  $GLOBALS['visiteur_session']=sql_fetsel('id_auteur,nom,statut,webmestre','spip_auteurs',"login='blobul_ai'");

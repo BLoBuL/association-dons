@@ -19,5 +19,5 @@ function formulaires_relancer_association_don_traiter_dist($id_suivi) {
 }
 
 function formulaires_relancer_association_don_saisies_dist($id_suivi) {
- return array(array('saisie'=>'case','options'=>array('nom'=>'confirmer','label_case'=>_T('association_dons:confirmer_relance'),'valeur_oui'=>'oui','valeur_non'=>'non','obligatoire'=>'oui')));
+ return array(array('saisie'=>'case','options'=>array('nom'=>'confirmer','id'=>'confirmer_'.(int)$id_suivi,'label_case'=>_T('association_dons:confirmer_relance'),'valeur_oui'=>'oui','valeur_non'=>'non','obligatoire'=>'oui')));
 }

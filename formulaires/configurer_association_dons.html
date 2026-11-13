@@ -1,4 +1,4 @@
-<div class="formulaire_spip formulaire_asso formulaire_config_association formulaire_configurer_association_dons">
+<div class="formulaire_spip formulaire_configurer_association_dons">
 [<p class="reponse_formulaire reponse_formulaire_ok" role="status">(#ENV*{message_ok})</p>]
 [<p class="reponse_formulaire reponse_formulaire_erreur" role="alert">(#ENV*{message_erreur})</p>]
 [(#ENV{mode_recette}|=={oui}|oui)<p class="notice"><:association_dons:config_recette_active:></p>]
@@ -6,5 +6,5 @@
 [(#ENV{_section}|=={paiements}|oui)<p class="explication"><:association_dons:configuration_explication:> <a href="#URL_ECRIRE{configurer_bank}"><:association_dons:config_ouvrir_bank:></a></p>]
 <form method="post" action="#ENV{action}"><div>#ACTION_FORMULAIRE{#ENV{action}}
 #GENERER_SAISIES{#ENV{_saisies}}
-</div><p class="boutons"><input type="submit" class="submit fondo" value="<:bouton_enregistrer|attribut_html:>" /></p>
+</div><p class="boutons"><input type="submit" class="submit" value="<:bouton_enregistrer|attribut_html:>" /></p>
 </form></div>

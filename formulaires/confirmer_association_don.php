@@ -16,5 +16,5 @@ function formulaires_confirmer_association_don_traiter_dist($id_suivi) {
 }
 
 function formulaires_confirmer_association_don_saisies_dist($id_suivi) {
- return array(array('saisie'=>'input','options'=>array('nom'=>'preuve_reglement','label'=>_T('association_dons:preuve_reglement'),'maxlength'=>255,'obligatoire'=>'oui')));
+ return array(array('saisie'=>'input','options'=>array('nom'=>'preuve_reglement','id'=>'preuve_reglement_'.(int)$id_suivi,'label'=>_T('association_dons:preuve_reglement'),'maxlength'=>255,'obligatoire'=>'oui')));
 }
