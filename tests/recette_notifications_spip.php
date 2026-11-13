@@ -43,7 +43,7 @@ try {
 	$r['rejeu_reglement_sans_doublon'] = sql_countsel('spip_asso_dons_notifications', 'id_donateur=' . $id . " AND type_notification IN ('soutien_regle','soutien_regle_association')") === 2 && !association_dons_envoyer_notification($n_regle) && !association_dons_envoyer_notification($n_association);
 
 
- // Plusieurs échéances, testées sans envoi ni modification des destinataires réels.
+ // Plusieurs Ã©chÃ©ances, testÃ©es sans envoi ni modification des destinataires rÃ©els.
  $multi=$config;$multi['delai_rappel']='7;14;30';$multi['preavis_renouvellement']='60;30;7';ecrire_config('association_dons',$multi);
  sql_updateq('spip_asso_dons_suivi',array('statut'=>'attente','date_creation'=>'2026-01-01 00:00:00'),'id_don_suivi='.(int)$s['id_don_suivi']);
  foreach(array('2026-01-08','2026-01-15','2026-01-31','2026-01-31') as $jour) { association_dons_preparer_revue($jour); }

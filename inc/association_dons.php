@@ -105,7 +105,7 @@ function association_dons_config_sections() {
  return $sections;
 }
 
-/** Pages uniques publiées, selon le même périmètre que la configuration Association. */
+/** Pages uniques publiÃ©es, selon le mÃªme pÃ©rimÃ¨tre que la configuration Association. */
 function association_dons_pages_uniques() {
  include_spip('inc/filtres');
  $pages=array();
@@ -115,7 +115,7 @@ function association_dons_pages_uniques() {
  return $pages;
 }
 
-/** Liste de délais en jours ; une ancienne valeur unique reste valable. */
+/** Liste de dÃ©lais en jours ; une ancienne valeur unique reste valable. */
 function association_dons_delais($valeur) {
  $elements=preg_split('/[;,\s]+/',trim((string)$valeur),-1,PREG_SPLIT_NO_EMPTY);
  if (!$elements) { return array(); }

@@ -98,7 +98,7 @@ function association_dons_preparer_revue($date = null) {
 	if ($config['notifications'] !== 'oui') { return; }
 	$delais=association_dons_delais($config['delai_rappel']);
  foreach (sql_allfetsel('id_don_suivi,id_donateur,date_creation', 'spip_asso_dons_suivi', "statut='attente'") as $suivi) {
-  // Une revue tardive ne déclenche que la dernière échéance atteinte.
+  // Une revue tardive ne dÃ©clenche que la derniÃ¨re Ã©chÃ©ance atteinte.
   $du=null;foreach($delais as $i=>$jours) { if (date('Y-m-d',strtotime($suivi['date_creation'].' +'.$jours.' days'))<=$date) { $du=array($i,$jours); } }
   if ($du!==null) { association_dons_programmer_notification('rappel_paiement',$suivi['id_donateur'],$suivi['id_don_suivi'],0,$du[0]?$du[1]:0); }
  }
