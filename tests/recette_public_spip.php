@@ -16,6 +16,10 @@ try {
 	set_request('consentement', ''); $r['consentement_obligatoire'] = isset(formulaires_devenir_ami_verifier_dist()['consentement']); set_request('consentement', 'oui');
 	set_request('signature_demande', 'invalide'); $r['signature_invalide_refusee'] = isset(formulaires_devenir_ami_verifier_dist()['message_erreur']); set_request('signature_demande', $charger['signature_demande']);
 	set_request('montant', '1'); $r['montant_insuffisant_refuse'] = isset(formulaires_devenir_ami_verifier_dist()['montant']); set_request('montant', '40');
+	set_request('montant', 'libre'); set_request('montant_libre', '1');
+	$r['montant_libre_insuffisant_refuse'] = isset(formulaires_devenir_ami_verifier_dist()['montant']);
+	set_request('montant', '40');
+	$r['montant_libre_inactif_ignore'] = !formulaires_devenir_ami_verifier_dist();
 	$traitement = formulaires_devenir_ami_traiter_dist();
 	$r['traitement_anonyme'] = !empty($traitement['redirect']);
 	$r['double_traitement'] = formulaires_devenir_ami_traiter_dist()['redirect'] === ($traitement['redirect'] ?? '');
