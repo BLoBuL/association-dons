@@ -1,7 +1,9 @@
 #CACHE{0}
 [(#AUTORISER{gerer,associationdons}|oui)
 [(#BOITE_OUVRIR{<:association_dons:configuration:>,raccourcis})]
-<ul class="liste_items"><li><a href="#URL_ECRIRE{association_donateurs}"><:association_dons:retour_liste:></a></li><li><a href="#URL_ECRIRE{configurer_association_dons}"><:association_dons:configuration:></a></li><li><a href="#URL_ECRIRE{dons}"><:association_dons:dons_historiques:></a></li></ul>
+[(#URL_ECRIRE{association_donateur}|icone_horizontale{<:association_dons:ajouter_donateur:>,auteur,new})]
+[(#URL_ECRIRE{configurer_association_dons}|icone_horizontale{<:association_dons:configuration:>,configuration})]
+[(#URL_ECRIRE{dons}|icone_horizontale{<:association_dons:dons_historiques:>,article})]
 #BOITE_FERMER
 ]
 [(#AUTORISER{gerer,associationdons}|oui)
