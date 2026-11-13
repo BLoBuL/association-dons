@@ -1,0 +1,12 @@
+#CACHE{0}
+[(#AUTORISER{associer,dons}|sinon_interdire_acces)]
+<h1 class="grostitre"><:asso:tous_les_dons:></h1>
+<div class="onglets_simple clearfix"><ul>
+<li>[(#SELF|parametre_url{annee,''}|parametre_url{debut_historique,''}|lien_ou_expose{<:info_tout_afficher:>,#ENV{annee,''}|non,ajax})]</li>
+<BOUCLE_annees(DATA){source table,(#VAL{''}|association_dons_historique_annees)}>
+<li>[(#SELF|parametre_url{annee,#VALEUR}|parametre_url{debut_historique,''}|lien_ou_expose{#VALEUR,#ENV{annee,''}|=={#VALEUR},ajax})]</li>
+</BOUCLE_annees></ul></div>
+#FORMULAIRE_RECHERCHE_ECRIRE{#SELF,ajax}
+<div class="nettoyeur"></div>
+<INCLURE{fond=prive/objets/liste/association_dons_historiques,env,ajax} />
+[(#URL_ECRIRE{edit_don}|icone_verticale{<:asso:ajouter_un_don:>,article,new,right})]

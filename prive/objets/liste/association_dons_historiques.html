@@ -1,0 +1,19 @@
+#CACHE{0}
+[(#AUTORISER{associer,dons}|sinon_interdire_acces)]
+<B_historique>#ANCRE_PAGINATION
+<div class="liste-objets dons"><table class="spip liste">
+<caption><strong class="caption"><:asso:tous_les_dons:> (#GRAND_TOTAL)</strong></caption>
+<thead><tr class="first_row"><th scope="col"><:asso:date:></th><th scope="col"><:asso:nom:></th><th scope="col" class="montant"><:asso:argent:></th><th scope="col"><:asso:colis:></th><th scope="col" class="montant"><:asso:valeur:></th><th scope="col"><:asso:contrepartie:></th><th scope="col" class="id"><:asso:id:></th></tr></thead>
+<tbody>
+<BOUCLE_historique(DATA){source table,(#ENV{annee,''}|association_dons_historique{#ENV{recherche,''}})}{pagination 30}>
+<tr class="[(#COMPTEUR_BOUCLE|alterner{row_odd,row_even})]">
+<td class="date">[(#VALEUR{date_don}|affdate)]</td>
+<td class="titre principale"><a href="[(#URL_ECRIRE{edit_don}|parametre_url{id,#VALEUR{id_don}})]">[(#VALEUR{bienfaiteur}|textebrut|entites_html)]</a></td>
+<td class="montant">[(#VALEUR{argent}|number_format{2,',',' '})] €</td>
+<td>[(#VALEUR{colis}|textebrut|entites_html)]</td>
+<td class="montant">[(#VALEUR{valeur}|number_format{2,',',' '})] €</td>
+<td>[(#VALEUR{contrepartie}|textebrut|entites_html)]</td>
+<td class="id">#VALEUR{id_don}</td></tr>
+</BOUCLE_historique>
+</tbody></table><nav class="pagination">#PAGINATION{prive}</nav></div>
+</B_historique><div class="liste-objets caption-wrap"><strong class="caption"><:association_dons:aucun_don:></strong></div><//B_historique>
