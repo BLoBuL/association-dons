@@ -2,12 +2,13 @@
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 include_spip('inc/association_dons_soutiens');
 
-function association_dons_programmer_notification($type, $id_donateur, $id_suivi = 0, $annee = 0) {
+function association_dons_programmer_notification($type, $id_donateur, $id_suivi = 0, $annee = 0, $echeance = 0) {
 	if (association_dons_configuration()['notifications'] !== 'oui' || !in_array($type, array('soutien_cree', 'soutien_regle', 'soutien_regle_association', 'rappel_paiement', 'renouvellement'), true)) { return 0; }
 	if ($type === 'soutien_regle_association' && !filter_var(association_dons_configuration()['email_secretariat'], FILTER_VALIDATE_EMAIL)) { return 0; }
 	$donateur = association_dons_donateur($id_donateur);
 	if (!$donateur || $donateur['archive'] === 'oui') { return 0; }
 	$cle = $type . ':' . (int)$id_donateur . ':' . (int)$id_suivi . ':' . (int)$annee;
+	if ($echeance && in_array($type,array('rappel_paiement','renouvellement'),true)) { $cle .= ':' . (int)$echeance; }
 	$verrou = association_dons_verrou('notification-' . $cle);
 	if (!$verrou) { return 0; }
 	try {
@@ -95,17 +96,22 @@ function association_dons_preparer_revue($date = null) {
 		association_dons_confirmer_bank($suivi['id_transaction']);
 	}
 	if ($config['notifications'] !== 'oui') { return; }
-	$limite = date('Y-m-d H:i:s', strtotime($date . ' -' . (int)$config['delai_rappel'] . ' days'));
-	foreach (sql_allfetsel('id_don_suivi,id_donateur', 'spip_asso_dons_suivi', "statut='attente' AND date_creation<" . sql_quote($limite)) as $suivi) {
-		association_dons_programmer_notification('rappel_paiement', $suivi['id_donateur'], $suivi['id_don_suivi']);
-	}
+	$delais=association_dons_delais($config['delai_rappel']);
+ foreach (sql_allfetsel('id_don_suivi,id_donateur,date_creation', 'spip_asso_dons_suivi', "statut='attente'") as $suivi) {
+  // Une revue tardive ne déclenche que la dernière échéance atteinte.
+  $du=null;foreach($delais as $i=>$jours) { if (date('Y-m-d',strtotime($suivi['date_creation'].' +'.$jours.' days'))<=$date) { $du=array($i,$jours); } }
+  if ($du!==null) { association_dons_programmer_notification('rappel_paiement',$suivi['id_donateur'],$suivi['id_don_suivi'],0,$du[0]?$du[1]:0); }
+ }
+ $preavis=array_reverse(association_dons_delais($config['preavis_renouvellement']));
 	foreach (sql_allfetsel('id_donateur', 'spip_asso_donateurs', "archive='non'") as $d) {
 		$periode = sql_fetsel('*', 'spip_asso_donateurs_periodes', 'id_donateur=' . (int)$d['id_donateur'] . " AND statut IN ('a_jour','echu')", '', 'annee DESC');
-		if (!$periode || date('Y-m-d', strtotime($periode['date_fin'] . ' -' . (int)$config['preavis_renouvellement'] . ' days')) > $date) { continue; }
+		if (!$periode) { continue; }
+  $du=null;foreach($preavis as $i=>$jours) { if (date('Y-m-d',strtotime($periode['date_fin'].' -'.$jours.' days'))<=$date) { $du=array($i,$jours); } }
+  if ($du===null) { continue; }
 		$annee = max((int)substr($date, 0, 4), (int)$periode['annee'] + 1);
 		if (substr($date, 0, 4) === '2026' && $annee === 2026) { $annee = 2027; }
 		if ($annee > (int)date('Y') + 1 || sql_countsel('spip_asso_donateurs_periodes', 'id_donateur=' . (int)$d['id_donateur'] . ' AND annee=' . $annee)) { continue; }
-		association_dons_programmer_notification('renouvellement', $d['id_donateur'], 0, $annee);
+		association_dons_programmer_notification('renouvellement', $d['id_donateur'], 0, $annee, $du[0]?$du[1]:0);
 	}
 	if (!(defined('_ASSOCIATION_DONS_CAPTURE_EMAILS') && _ASSOCIATION_DONS_CAPTURE_EMAILS)) {
 		include_spip('inc/queue');

@@ -42,6 +42,19 @@ try {
 	pipeline('association_dons_evenement', array('args' => array('evenement' => 'soutien_regle', 'id_donateur' => $id, 'id_don_suivi' => $s['id_don_suivi']), 'data' => array()));
 	$r['rejeu_reglement_sans_doublon'] = sql_countsel('spip_asso_dons_notifications', 'id_donateur=' . $id . " AND type_notification IN ('soutien_regle','soutien_regle_association')") === 2 && !association_dons_envoyer_notification($n_regle) && !association_dons_envoyer_notification($n_association);
 
+
+ // Plusieurs échéances, testées sans envoi ni modification des destinataires réels.
+ $multi=$config;$multi['delai_rappel']='7;14;30';$multi['preavis_renouvellement']='60;30;7';ecrire_config('association_dons',$multi);
+ sql_updateq('spip_asso_dons_suivi',array('statut'=>'attente','date_creation'=>'2026-01-01 00:00:00'),'id_don_suivi='.(int)$s['id_don_suivi']);
+ foreach(array('2026-01-08','2026-01-15','2026-01-31','2026-01-31') as $jour) { association_dons_preparer_revue($jour); }
+ $r['trois_rappels_sans_doublon']=sql_countsel('spip_asso_dons_notifications','id_donateur='.$id." AND type_notification='rappel_paiement'")===3;
+ sql_delete('spip_asso_dons_notifications','id_donateur='.$id." AND type_notification='rappel_paiement'");
+ sql_updateq('spip_asso_dons_suivi',array('statut'=>'regle'),'id_don_suivi='.(int)$s['id_don_suivi']);
+ sql_updateq('spip_asso_donateurs_periodes',array('annee'=>2026,'date_fin'=>'2026-12-31'),'id_donateur_periode='.(int)$s['id_donateur_periode']);
+ foreach(array('2026-11-01','2026-12-01','2026-12-24','2026-12-24') as $jour) { association_dons_preparer_revue($jour); }
+ $r['trois_invitations_sans_doublon']=sql_countsel('spip_asso_dons_notifications','id_donateur='.$id." AND type_notification='renouvellement'")===3;
+ sql_delete('spip_asso_dons_notifications','id_donateur='.$id." AND type_notification='renouvellement'");
+ ecrire_config('association_dons',$config);
 	$n_rappel = association_dons_programmer_notification('rappel_paiement', $id, $s['id_don_suivi']);
 	$r['rappel_annule_si_paye'] = !association_dons_envoyer_notification($n_rappel) && sql_getfetsel('etat', 'spip_asso_dons_notifications', 'id_don_notification=' . $n_rappel) === 'annule';
 	sql_updateq('spip_asso_donateurs_periodes', array('annee' => 2025, 'date_debut' => '2025-01-01', 'date_fin' => '2025-12-31', 'statut' => 'a_jour'), 'id_donateur_periode=' . (int)$s['id_donateur_periode']);

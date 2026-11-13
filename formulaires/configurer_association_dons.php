@@ -30,7 +30,7 @@ function formulaires_configurer_association_dons_saisies_dist($section='') {
    } elseif($champ==='devise') {
     $type='selection'; $options['data']=$devises; $options['cacher_option_intro']='oui';
    } elseif($champ==='instructions_virement') { $type='textarea'; $options['rows']=5;
-   } elseif(in_array($champ,array('minimum','delai_rappel','preavis_renouvellement'),true)) {
+   } elseif(in_array($champ,array('minimum'),true)) {
     $options['type']='number'; $options['min']=$champ==='minimum'?'0.01':1; $options['step']=$champ==='minimum'?'0.01':1;
     if($champ!=='minimum') { $options['max']=365; }
    } elseif(strpos($champ,'url_')===0) { $options['type']='url';
@@ -85,7 +85,7 @@ function association_dons_config_erreurs($valeurs) {
 	if ($valeurs['virement'] === 'oui' && !trim((string)$valeurs['instructions_virement'])) { $erreurs['instructions_virement'] = _T('association_dons:erreur_champ'); }
 	if (($valeurs['notifications'] === 'oui' || $valeurs['email_secretariat']) && !filter_var($valeurs['email_secretariat'], FILTER_VALIDATE_EMAIL)) { $erreurs['email_secretariat'] = _T('association_dons:erreur_champ'); }
 	foreach (array('preavis_renouvellement', 'delai_rappel') as $champ) {
-		if (!ctype_digit((string)$valeurs[$champ]) || (int)$valeurs[$champ] < 1 || (int)$valeurs[$champ] > 365) { $erreurs[$champ] = _T('association_dons:erreur_champ'); }
+		if (!association_dons_delais($valeurs[$champ])) { $erreurs[$champ] = _T('association_dons:erreur_champ'); }
 	}
 	foreach (array('journal_dons', 'imputation_dons') as $champ) {
 		if ($valeurs[$champ] !== '' && !preg_match('/^[a-zA-Z0-9_.-]{1,30}$/D', (string)$valeurs[$champ])) { $erreurs[$champ] = _T('association_dons:erreur_champ'); }

@@ -114,3 +114,15 @@ function association_dons_pages_uniques() {
  }
  return $pages;
 }
+
+/** Liste de délais en jours ; une ancienne valeur unique reste valable. */
+function association_dons_delais($valeur) {
+ $elements=preg_split('/[;,\s]+/',trim((string)$valeur),-1,PREG_SPLIT_NO_EMPTY);
+ if (!$elements) { return array(); }
+ $delais=array();
+ foreach($elements as $element) {
+  if (!ctype_digit($element) || (int)$element<1 || (int)$element>365) { return array(); }
+  $delais[]=(int)$element;
+ }
+ $delais=array_values(array_unique($delais));sort($delais);return $delais;
+}
