@@ -33,6 +33,7 @@ try {
 	$resultats['erreurs_squelettes'] = count($GLOBALS['tableau_des_erreurs'] ?? array());
 	include_spip('formulaires/configurer_association_dons');
 	$config = association_dons_configuration();
+	if ($config['prestataires']===null) { $config['prestataires']=array_keys(association_dons_prestataires_disponibles()); }
 	foreach ($config as $champ => $valeur) { set_request($champ, $valeur); }
 	$resultats['configuration_valide'] = !formulaires_configurer_association_dons_verifier_dist();
 	set_request('minimum', '50');

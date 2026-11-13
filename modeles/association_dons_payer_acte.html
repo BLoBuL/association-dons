@@ -1,0 +1,14 @@
+#CACHE{0}
+<BOUCLE_transaction(TRANSACTIONS){id_transaction}{statut IN commande,attente}>
+<div id="formulaire_mode_paiement" class="acte">
+<h3 class="selectionnez"><:bank:titre_mode_paiement_securise:></h3>
+<B_modes><div class="payer_modes">
+<BOUCLE_modes(DATA){source table,#VAL{''}|association_dons_prestataires_selectionnes}>
+#SET{options,#ARRAY{payer_par_title,#CONFIG{bank_paiement_apparence/config_#CLE/titre},payer_explication,#CONFIG{bank_paiement_apparence/config_#CLE/explication}}}
+#PAYER_ACTE{#VALEUR,#ID_TRANSACTION,#TRANSACTION_HASH,#GET{options}}
+</BOUCLE_modes>
+</div></B_modes><p class="error"><:association_dons:erreur_prestataires:></p><//B_modes>
+</div>
+</BOUCLE_transaction>
+
+<style type="text/css">[(#REM|bank_payer_css)]</style>

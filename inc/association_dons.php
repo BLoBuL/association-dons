@@ -6,7 +6,7 @@ include_spip('inc/autoriser');
 
 function association_dons_configuration() {
 	$config = array_merge(array(
-		'montants' => '40;100', 'minimum' => '40', 'devise' => 'EUR',
+		'prestataires' => null, 'montants' => '40;100', 'minimum' => '40', 'devise' => 'EUR',
 		'virement' => 'non', 'fondation' => 'non', 'url_fondation' => '',
 		'instructions_virement' => '', 'url_confidentialite' => '',
 		'journal_dons' => '',
@@ -65,4 +65,25 @@ function association_dons_liste($statut = '', $recherche = '') {
 		if ($statut === '' || $statut === $donateur['statut_calcule']) { $resultat[] = $donateur; }
 	}
 	return $resultat;
+}
+
+/** Configurations actives Bank, identifiées par leur clé stable (plusieurs comptes possibles). */
+function association_dons_prestataires_disponibles() {
+ include_spip('inc/bank');
+ return array_filter(bank_lister_configs('acte'), function($config) { return !empty($config['actif']); });
+}
+function association_dons_prestataires_selectionnes() {
+ $tous=association_dons_prestataires_disponibles();
+ $choix=association_dons_configuration()['prestataires'];
+ return $choix===null ? $tous : array_intersect_key($tous,array_flip((array)$choix));
+}
+function association_dons_prestataires_labels() {
+ include_spip('inc/filtres');
+ $data=array();
+ foreach(association_dons_prestataires_disponibles() as $cle=>$config) {
+  $nom=_T('bank:label_presta_'.$config['presta']);
+  $label=trim((string)($config['label']??''));
+  $data[$cle]=entites_html($nom.($label!==''?' — '.$label:'').' ['.$cle.']'.(in_array($config['mode_test']??null,array(true,1,'1','test'),true)?' — '._T('association_dons:presta_mode_test'):''));
+ }
+ return $data;
 }

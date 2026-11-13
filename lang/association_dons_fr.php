@@ -1,6 +1,11 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'prestataires' => 'Prestataires Bank proposés pour les dons',
+	'aide_prestataires' => 'Sélectionnez les configurations Bank actives à présenter au donateur. Les libellés et paramètres restent gérés dans Bank. Pour la Fondation Roi Baudouin, configurez le prestataire dédié dans Bank. Les anciens soutiens restent conservés.',
+	'erreur_prestataires' => 'Sélectionnez au moins une configuration active de Bank.',
+	'presta_mode_test' => 'Test',
+	'choix_paiement_etape_suivante' => 'Vous choisirez votre moyen de paiement à l’étape suivante.',
 	'bank_don_libelle' => 'Don Ami n° @reference@',
 	'bank_don_description' => 'Soutien annuel jusqu’à fin @annee@',
 	'config_titre' => 'Configurer les dons et les Amis',

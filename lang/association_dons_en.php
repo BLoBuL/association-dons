@@ -1,6 +1,11 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'prestataires' => 'Bank providers offered for donations',
+	'aide_prestataires' => 'Select the active Bank configurations to offer donors. Labels and settings remain managed in Bank. Configure the dedicated King Baudouin Foundation provider there. Existing support records are preserved.',
+	'erreur_prestataires' => 'Select at least one active Bank configuration.',
+	'presta_mode_test' => 'Test',
+	'choix_paiement_etape_suivante' => 'You will choose your payment method in the next step.',
 	'bank_don_libelle' => 'Friend donation no. @reference@',
 	'bank_don_description' => 'Annual support until the end of @annee@',
 	'config_titre' => 'Configure donations and Friends',

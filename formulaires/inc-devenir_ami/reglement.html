@@ -1,1 +1,3 @@
-<div class="editer editer_mode_paiement saisie_selection"><label class="editer-label" for="mode_paiement"><:association_dons:mode_paiement:></label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{mode_paiement})</span>]<select name="mode_paiement" id="mode_paiement"><option value="bank"><:association_dons:paiement_bank:></option>[(#ENV{_config}|table_valeur{virement}|=={oui}|oui)<option value="virement"[(#ENV{mode_paiement}|=={virement}|oui) selected="selected"]><:association_dons:paiement_virement:></option>][(#ENV{_config}|table_valeur{fondation}|=={oui}|oui)<option value="fondation"[(#ENV{mode_paiement}|=={fondation}|oui) selected="selected"]><:association_dons:paiement_fondation:></option>]</select></div>
+[(#REM) Tous les nouveaux choix de règlement passent par les configurations Bank autorisées. ]
+<input type="hidden" name="mode_paiement" value="bank" />
+<p class="explication"><:association_dons:choix_paiement_etape_suivante:></p>

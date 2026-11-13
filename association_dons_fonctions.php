@@ -8,7 +8,7 @@ function association_dons_libelle_statut($statut) {
 }
 
 function association_dons_libelle_notification($type) {
-	return in_array($type, array('soutien_cree', 'soutien_regle', 'rappel_paiement', 'renouvellement'), true) ? _T('association_dons:notification_' . $type) : '';
+	return in_array($type, array('soutien_cree', 'soutien_regle', 'soutien_regle_association', 'rappel_paiement', 'renouvellement'), true) ? _T('association_dons:notification_' . $type) : '';
 }
 
 function association_dons_libelle_envoi($etat) {

@@ -62,3 +62,9 @@ Le déclenchement suit un règlement Bank confirmé ou une confirmation administ
 La page reprend la configuration d’Association : navigation latérale, formulaires Saisies, fieldsets et aides. Les six rubriques sont Mode recette et ouverture, Montants et devise, Moyens de paiement, Comptabilité, Protection des données, Notifications et rappels. Chaque rubrique enregistre uniquement ses champs et conserve les autres réglages. Le lien vers Bank ouvre sa configuration sans recopier ni modifier ses secrets.
 
 Le choix de notifications enregistré reste visible pendant la recette ; les envois sont toutefois neutralisés jusqu’à sa désactivation. La sortie du mode recette exige une politique de confidentialité et, si la comptabilité est active, les deux codes comptables. Un récapitulatif nomme les champs manquants et permet de les compléter dans leur rubrique avant de réessayer.
+
+## Choisir les prestataires Bank pour les dons
+
+Dans la rubrique Moyens de paiement, sélectionner les configurations Bank actives à proposer. Plusieurs configurations d’un même prestataire sont distinguées par leur libellé et leur clé. Les cartes, virements et autres prestataires sont configurés dans Bank ; les anciennes cases et coordonnées propres au module sont remplacées par cette sélection. Les anciens soutiens virement/Fondation restent consultables et confirmables.
+
+Pour la Fondation Roi Baudouin, ajouter ou modifier son prestataire dans Bank, renseigner son URL HTTPS puis l’activer. Le donateur choisit son prestataire sur la page suivant le formulaire. Le bouton Fondation enregistre le choix en attente et ouvre Twikey ; aucun retour navigateur ne confirme un règlement. Après rapprochement du règlement externe, un administrateur renseigne sa preuve sur la fiche donateur ou utilise l’encaissement Bank. La transaction et le soutien sont confirmés une seule fois, sans écriture de recette bancaire locale pour la Fondation.

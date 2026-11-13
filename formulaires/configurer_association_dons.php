@@ -6,7 +6,7 @@ function association_dons_config_sections() {
  return array(
   'recette' => array('mode_recette'),
   'montants' => array('montants','minimum','devise'),
-  'paiements' => array('virement','instructions_virement','fondation','url_fondation'),
+  'paiements' => array('prestataires'),
   'comptabilite' => array('journal_dons','imputation_dons'),
   'confidentialite' => array('url_confidentialite'),
   'notifications' => array('notifications','email_secretariat','delai_rappel','preavis_renouvellement'),
@@ -31,7 +31,9 @@ function formulaires_configurer_association_dons_saisies_dist($section='') {
   foreach($champs as $champ) {
    $options=array('nom'=>$champ,'label'=>_T('association_dons:'.$champ),'explication'=>_T('association_dons:aide_'.$champ));
    $type='input';
-   if(in_array($champ,array('mode_recette','notifications','virement','fondation'),true)) {
+   if($champ==='prestataires') {
+    $type='checkbox'; $options['data']=association_dons_prestataires_labels();
+   } elseif(in_array($champ,array('mode_recette','notifications','virement','fondation'),true)) {
     $type='case'; $options['label_case']=$options['label']; unset($options['label']); $options['valeur_oui']='oui'; $options['valeur_non']='non';
    } elseif($champ==='devise') {
     $type='selection'; $options['data']=$devises; $options['cacher_option_intro']='oui';
@@ -51,6 +53,7 @@ function formulaires_configurer_association_dons_charger_dist($section='') {
  if(!autoriser('gerer','associationdons') || !association_dons_config_champs($section)) { return false; }
  $config=association_dons_config_valeurs();
  $config['_section']=$section;
+ if ($config['prestataires']===null) { $config['prestataires']=array_keys(association_dons_prestataires_disponibles()); }
  $config['_comptabilite']=!empty($GLOBALS['association_metas']['comptes']);
  $config['_saisies']=formulaires_configurer_association_dons_saisies_dist($section);
  return $config;
@@ -59,13 +62,15 @@ function association_dons_config_soumission($section) {
  $config=association_dons_config_valeurs();
  foreach(association_dons_config_champs($section) as $champ) {
   $valeur=_request($champ);
-  if(in_array($champ,array('mode_recette','notifications','virement','fondation'),true)) { $config[$champ]=$valeur==='oui'?'oui':'non'; }
+  if($champ==='prestataires') { $config[$champ]=is_array($valeur)?array_values(array_unique(array_filter($valeur,'is_string'))):array(); }
+  elseif(in_array($champ,array('mode_recette','notifications','virement','fondation'),true)) { $config[$champ]=$valeur==='oui'?'oui':'non'; }
   else { $config[$champ]=is_scalar($valeur)?trim((string)$valeur):''; }
  }
  return $config;
 }
 function association_dons_config_erreurs($valeurs) {
 	$erreurs = array();
+	if ($valeurs['prestataires']!==null && (!is_array($valeurs['prestataires']) || !$valeurs['prestataires'] || array_diff($valeurs['prestataires'],array_keys(association_dons_prestataires_disponibles())))) { $erreurs['prestataires']=_T('association_dons:erreur_prestataires'); }
 	$minimum = association_dons_centimes($valeurs['minimum']);
 	$vus = array();
 	foreach (explode(';', (string)$valeurs['montants']) as $montant) {

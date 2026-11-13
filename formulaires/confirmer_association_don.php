@@ -4,7 +4,7 @@ include_spip('inc/association_dons_soutiens');
 function formulaires_confirmer_association_don_charger_dist($id_suivi) {
 	if (!autoriser('gerer', 'associationdons')) { return false; }
 	$suivi = sql_fetsel('*', 'spip_asso_dons_suivi', 'id_don_suivi=' . (int)$id_suivi);
-	return $suivi && $suivi['statut'] === 'attente' && in_array($suivi['mode_paiement'], array('virement', 'fondation'), true) ? array('preuve_reglement' => '') : false;
+	return association_dons_confirmation_manuelle_possible($id_suivi) ? array('preuve_reglement' => '') : false;
 }
 function formulaires_confirmer_association_don_verifier_dist($id_suivi) {
 	if (!autoriser('gerer', 'associationdons')) { return array('message_erreur' => _T('info_acces_interdit')); }
