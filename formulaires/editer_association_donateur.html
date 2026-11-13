@@ -1,16 +1,10 @@
-<div class="formulaire_spip formulaire_editer formulaire_editer_association_donateur">
-[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
-[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+<div class="formulaire_spip formulaire_editer_association_donateur">
+[<p class="reponse_formulaire reponse_formulaire_ok" role="status">(#ENV*{message_ok})</p>]
+[<p class="reponse_formulaire reponse_formulaire_erreur" role="alert">(#ENV*{message_erreur})</p>]
+[(#ENV{editable}|oui)
 <form method="post" action="#ENV{action}"><div>
 #ACTION_FORMULAIRE{#ENV{action}}
-<div class="editer-groupe">
-<div class="editer editer_type_donateur"><label for="type_donateur"><:association_dons:type_donateur:></label><select name="type_donateur" id="type_donateur"><option value="particulier"[(#ENV{type_donateur}|=={particulier}|oui) selected="selected"]><:association_dons:particulier:></option><option value="organisation"[(#ENV{type_donateur}|=={organisation}|oui) selected="selected"]><:association_dons:organisation:></option></select></div>
-<div class="editer editer_nom obligatoire[ (#ENV**{erreurs}|table_valeur{nom}|oui)erreur]"><label for="nom"><:association_dons:nom:></label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{nom})</span>]<input type="text" class="text" name="nom" id="nom" value="#ENV{nom}" maxlength="255" required="required" /></div>
-<div class="editer editer_prenom"><label for="prenom"><:association_dons:prenom:></label><input type="text" class="text" name="prenom" id="prenom" value="#ENV{prenom}" maxlength="255" /></div>
-<div class="editer editer_raison_sociale"><label for="raison_sociale"><:association_dons:raison_sociale:></label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{raison_sociale})</span>]<input type="text" class="text" name="raison_sociale" id="raison_sociale" value="#ENV{raison_sociale}" maxlength="255" /></div>
-<div class="editer editer_email obligatoire"><label for="email"><:association_dons:email:></label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{email})</span>]<input type="email" class="text" name="email" id="email" value="#ENV{email}" maxlength="255" required="required" /></div>
-[(#ENV{_organisations}|oui)<INCLURE{fond=prive/squelettes/inclure/association_dons_organisation,id_organisation=#ENV{id_organisation}} />]
-<div class="editer editer_publication_nom"><label for="publication_nom"><:association_dons:publication_nom:></label><select name="publication_nom" id="publication_nom"><option value="non"[(#ENV{publication_nom}|=={non}|oui) selected="selected"]><:item_non:></option><option value="oui"[(#ENV{publication_nom}|=={oui}|oui) selected="selected"]><:item_oui:></option></select></div>
-<div class="editer editer_archive"><div class="choix"><input type="checkbox" name="archive" id="archive" value="oui"[(#ENV{archive}|=={oui}|oui) checked="checked"] /><label for="archive"><:association_dons:archiver:></label></div></div>
-</div><p class="boutons"><button type="submit" class="submit"><:bouton_enregistrer:></button></p>
-</div></form></div>
+#GENERER_SAISIES{#ENV{_saisies}}
+<p class="boutons"><button type="submit" class="submit"><:bouton_enregistrer:></button></p>
+</div></form>]
+</div>

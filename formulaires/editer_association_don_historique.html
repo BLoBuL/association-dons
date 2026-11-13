@@ -1,0 +1,10 @@
+<div class="formulaire_spip formulaire_editer formulaire_editer_association_don_historique">
+[<p class="reponse_formulaire reponse_formulaire_ok" role="status">(#ENV*{message_ok})</p>]
+[<p class="reponse_formulaire reponse_formulaire_erreur" role="alert">(#ENV*{message_erreur})</p>]
+[(#ENV{editable}|oui)<form method="post" action="#ENV{action}"><div>
+#ACTION_FORMULAIRE{#ENV{action}}
+#GENERER_SAISIES{#ENV{_saisies}}
+[(#ENV{destinations_on}|oui)<div class="editer-groupe"><div class="editer editer_destinations">#EDITEUR_DESTINATIONS</div></div>]
+<p class="boutons"><button class="submit" type="submit"><:bouton_enregistrer:></button></p>
+</div></form>]
+</div>

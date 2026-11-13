@@ -1,7 +1,10 @@
 <div class="formulaire_spip formulaire_confirmer_association_don">
-[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
-[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
-<form method="post" action="#ENV{action}"><div>#ACTION_FORMULAIRE{#ENV{action}}
-<div class="editer-groupe"><div class="editer editer_preuve_reglement obligatoire"><label for="preuve_reglement_#ENV{id}"><:association_dons:preuve_reglement:></label>[<span class="erreur_message">(#ENV**{erreurs}|table_valeur{preuve_reglement})</span>]<input type="text" name="preuve_reglement" id="preuve_reglement_#ENV{id}" value="#ENV{preuve_reglement}" class="text" maxlength="255" required="required" /></div></div>
+[<p class="reponse_formulaire reponse_formulaire_ok" role="status">(#ENV*{message_ok})</p>]
+[<p class="reponse_formulaire reponse_formulaire_erreur" role="alert">(#ENV*{message_erreur})</p>]
+[(#ENV{editable}|oui)
+<form method="post" action="#ENV{action}"><div>
+#ACTION_FORMULAIRE{#ENV{action}}
+#GENERER_SAISIES{#ENV{_saisies}}
 <p class="boutons"><button type="submit" class="submit"><:association_dons:confirmer_reglement:></button></p>
-</div></form></div>
+</div></form>]
+</div>
