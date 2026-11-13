@@ -2,6 +2,14 @@
 [(#AUTORISER{gerer,associationdons}|sinon_interdire_acces)]
 <h1 class="grostitre"><:association_dons:titre_donateurs:></h1>
 <p><a class="btn" href="#URL_ECRIRE{association_donateur}"><:association_dons:ajouter_donateur:></a> <a href="#URL_ECRIRE{configurer_association_dons}"><:association_dons:configuration:></a> · <a href="#URL_ECRIRE{dons}"><:association_dons:dons_historiques:></a></p>
+#SET{kpi,#VAL{''}|association_dons_indicateurs}
+[(#BOITE_OUVRIR{<:association_dons:vue_ensemble:>,simple})]
+<p class="explication"><:association_dons:indicateurs_perimetre:></p>
+<table class="spip"><thead><tr><th scope="col"><:association_dons:donateurs_actifs:></th><th scope="col"><:association_dons:statut_a_jour:></th><th scope="col"><:association_dons:statut_echu:></th><th scope="col"><:association_dons:demandes_attente:></th></tr></thead>
+<tbody><tr><td><strong>[(#GET{kpi}|table_valeur{total})]</strong></td><td><strong>[(#GET{kpi}|table_valeur{a_jour})]</strong></td><td><strong>[(#GET{kpi}|table_valeur{echu})]</strong></td><td><strong>[(#GET{kpi}|table_valeur{demandes_attente})]</strong></td></tr></tbody></table>
+<p><strong><:association_dons:dons_confirmes_annee:> [(#GET{kpi}|table_valeur{annee})]</strong> :
+<BOUCLE_montants(DATA){source table,(#GET{kpi}|table_valeur{montants})}{', '}>[(#VALEUR{montant}|number_format{2,',',' '})] #VALEUR{devise} (#VALEUR{nombre})</BOUCLE_montants><:association_dons:aucun_don:><//B_montants></p>
+#BOITE_FERMER
 <div class="formulaire_spip formulaire_rechercher_donateurs">
 <form method="get" action="#URL_ECRIRE{association_donateurs}"><div>
 <input type="hidden" name="exec" value="association_donateurs" />
@@ -10,8 +18,8 @@
 <div class="editer"><label for="statut_donateurs"><:association_dons:statut:></label><select name="statut_donateurs" id="statut_donateurs"><option value=""><:association_dons:tous:></option><BOUCLE_statuts(DATA){source table,#LISTE{a_jour,attente,echu,ancien}}><option value="#VALEUR"[(#ENV{statut_donateurs}|=={#VALEUR}|oui) selected="selected"]>[(#VALEUR|association_dons_libelle_statut)]</option></BOUCLE_statuts></select></div>
 </div><p class="boutons"><a href="#URL_ECRIRE{association_donateurs}"><:association_dons:reinitialiser_filtres:></a> <button class="submit" type="submit"><:info_rechercher:></button></p>
 </div></form></div>
-<B_donateurs><div class="liste-objets association_donateurs"><table class="spip liste"><caption><strong class="caption"><:association_dons:titre_donateurs:> (#GRAND_TOTAL)</strong></caption><thead><tr class="first_row"><th scope="col"><:association_dons:nom:></th><th scope="col"><:association_dons:email:></th><th scope="col"><:association_dons:statut:></th></tr></thead><tbody class="liste_items">
+<B_donateurs><div class="liste-objets association_donateurs"><table class="spip liste"><caption><strong class="caption"><:association_dons:titre_donateurs:> (#GRAND_TOTAL)</strong></caption><thead><tr class="first_row"><th scope="col"><:association_dons:nom:></th><th scope="col"><:association_dons:email:></th><th scope="col"><:association_dons:statut:></th><th scope="col"><:association_dons:validite:></th><th scope="col"><:association_dons:dernier_don:></th></tr></thead><tbody class="liste_items">
 #ANCRE_PAGINATION
-<BOUCLE_donateurs(DATA){source table,(#ENV{statut_donateurs,''}|association_dons_liste{#ENV{recherche_donateurs,''}})}{pagination 30}>
-<tr class="[(#COMPTEUR_BOUCLE|alterner{row_odd,row_even})]"><td class="titre principale"><a href="[(#URL_ECRIRE{association_donateur}|parametre_url{id_donateur,#VALEUR{id_donateur}})]">[(#VALEUR{prenom}|textebrut|entites_html)] [(#VALEUR{nom}|textebrut|entites_html)]</a>[ — (#VALEUR{raison_sociale}|textebrut|entites_html)]</td><td>[(#VALEUR{email}|entites_html)]</td><td>[(#VALEUR{statut_calcule}|association_dons_libelle_statut)]</td></tr>
+<BOUCLE_donateurs(DATA){source table,(#ENV{statut_donateurs,''}|association_dons_tableau{#ENV{recherche_donateurs,''}})}{pagination 30}>
+<tr class="[(#COMPTEUR_BOUCLE|alterner{row_odd,row_even})]"><td class="titre principale"><a href="[(#URL_ECRIRE{association_donateur}|parametre_url{id_donateur,#VALEUR{id_donateur}})]">[(#VALEUR{prenom}|textebrut|entites_html)] [(#VALEUR{nom}|textebrut|entites_html)]</a><br /><small>[(#VALEUR{type_donateur}|association_dons_libelle_type)] · #VALEUR{id_donateur}</small>[ — (#VALEUR{raison_sociale}|textebrut|entites_html)]</td><td>[(#VALEUR{email}|entites_html)]</td><td>[(#VALEUR{statut_calcule}|association_dons_libelle_statut)]</td><td>[(#VALEUR{validite}|affdate)]</td><td>[(#VALEUR{dernier_don}|oui)[(#VALEUR{dernier_don}|table_valeur{montant}|number_format{2,',',' '})] [(#VALEUR{dernier_don}|table_valeur{devise})][<br /><small>(#VALEUR{dernier_don}|table_valeur{date_reglement}|affdate)</small>]]</td></tr>
 </BOUCLE_donateurs></tbody></table></div>[<nav class="pagination">(#PAGINATION{prive})</nav>]</B_donateurs><div class="liste-objets caption-wrap"><strong class="caption"><:association_dons:aucun_donateur:></strong></div><//B_donateurs>

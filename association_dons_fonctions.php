@@ -24,3 +24,7 @@ function association_dons_libelle_paiement($mode) {
 function association_dons_libelle_reglement($statut) {
  return in_array($statut,array('attente','regle'),true) ? _T('association_dons:reglement_'.$statut) : '';
 }
+
+function association_dons_libelle_type($type) {
+ return in_array($type,array('particulier','organisation'),true) ? _T('association_dons:'.$type) : '';
+}

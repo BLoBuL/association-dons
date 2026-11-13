@@ -126,3 +126,31 @@ function association_dons_delais($valeur) {
  }
  $delais=array_values(array_unique($delais));sort($delais);return $delais;
 }
+
+/** Compléments groupés pour la liste privée, sans additionner des devises différentes. */
+function association_dons_tableau($statut='', $recherche='') {
+ $donateurs=association_dons_liste($statut,$recherche);
+ if (!$donateurs) { return array(); }
+ $ids=array_column($donateurs,'id_donateur');$derniers=array();$validites=array();
+ foreach(sql_allfetsel('id_donateur,montant,devise,date_reglement,mode_paiement','spip_asso_dons_suivi',array(sql_in('id_donateur',$ids),"statut='regle'"),'','date_reglement DESC,id_don_suivi DESC') as $don) {
+  if (!isset($derniers[$don['id_donateur']])) { $derniers[$don['id_donateur']]=$don; }
+ }
+ foreach(sql_allfetsel('id_donateur,MAX(date_fin) AS date_fin','spip_asso_donateurs_periodes',array(sql_in('id_donateur',$ids),"statut IN ('a_jour','echu')"),'id_donateur') as $periode) { $validites[$periode['id_donateur']]=$periode['date_fin']; }
+ foreach($donateurs as &$donateur) { $id=$donateur['id_donateur'];$donateur['dernier_don']=$derniers[$id]??array();$donateur['validite']=$validites[$id]??''; }unset($donateur);
+ return $donateurs;
+}
+
+/** Vue globale : effectifs courants et dons confirmés dans l'année civile. */
+function association_dons_indicateurs() {
+ if (!autoriser('gerer','associationdons')) { return array(); }
+ $r=array('total'=>0,'a_jour'=>0,'echu'=>0,'attente'=>0,'montants'=>array());
+ foreach(association_dons_liste() as $donateur) {
+  if ($donateur['archive']==='oui') { continue; }
+  $r['total']++;
+  if (isset($r[$donateur['statut_calcule']])) { $r[$donateur['statut_calcule']]++; }
+ }
+ $r['demandes_attente']=sql_countsel('spip_asso_dons_suivi',"statut='attente'");
+ $r['annee']=date('Y');
+ $r['montants']=sql_allfetsel('devise,SUM(montant) AS montant,COUNT(*) AS nombre','spip_asso_dons_suivi',array("statut='regle'",'date_reglement>='.sql_quote($r['annee'].'-01-01 00:00:00'),'date_reglement<'.sql_quote(((int)$r['annee']+1).'-01-01 00:00:00')),'devise','devise');
+ return $r;
+}
