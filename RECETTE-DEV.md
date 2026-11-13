@@ -60,3 +60,7 @@ Recette avec `RECETTE PARCOURS COMPLET 20261112`, destinataire `.invalid`, monta
 **Limite : recette visuelle du privé non validée.** L’authentification technique a réussi avec le helper officiel, mais le contrôle automatique a refusé l’ouverture du profil Chrome authentifié. Aucun autre procédé n’a été utilisé pour reproduire cette ouverture. Les vérifications privées ci-dessus portent sur les contrôleurs CVT et le rendu natif serveur sous identité technique administrateur ; elles ne constituent pas des clics dans une session privée du navigateur. Le parcours public est validé dans le navigateur ; la recette complète de bout en bout dans une interface authentifiée reste donc partielle.
 
 ![Confirmation publique après règlement synthétique](docs/captures/parcours-confirmation-dev.png)
+
+## Recette du 13 novembre avec réceptions réelles
+
+Voir le [rapport détaillé](docs/recette-2026-11-13.md) : Stripe sandbox, virement fictif, réceptions donateur/association et corrections déployées. Les fixtures 45 et 46 restent disponibles pour terminer le contrôle visuel privé.

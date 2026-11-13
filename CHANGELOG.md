@@ -2,6 +2,8 @@
 
 ## [À venir]
 
+- Recette externe Stripe sandbox et réceptions réelles des notifications ; correction du montant libre inactif, de la mise en forme HTML des emails et du libellé Bank des dons autonomes.
+
 - Notification de règlement confirmé au contact configuré de l’association, distincte de la confirmation au donateur : journaux et déduplication séparés, lien administratif sans jeton public, textes FR/EN. Adresse de contact obligatoire pour activer les notifications.
 
 - Formulaire public découpé en inclusions, classes SPIP/Saisies des champs et choix ; suppression de la feuille CSS spécifique et de son chargement global. Surcharge de composition possible dans le Core sans dupliquer les champs.
