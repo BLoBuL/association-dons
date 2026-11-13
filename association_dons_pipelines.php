@@ -12,7 +12,7 @@ function association_dons_bank_redirige_apres_retour_transaction($flux) {
 	$id_transaction = (int)($flux['args']['id_transaction'] ?? 0);
 	$suivi = sql_fetsel('*', 'spip_asso_dons_suivi', 'id_transaction=' . $id_transaction . ' AND id_transaction>0');
 	$mode = $flux['args']['row']['mode'] ?? '';
-	if ($suivi && !(strpos($mode,'fondation_roibaudouin/')===0 && ($flux['args']['succes']??null)==='wait')) { $flux['data'] = association_dons_url_suivi($suivi); }
+	if ($suivi && !(strpos($mode,'roi_baudouin/')===0 && ($flux['args']['succes']??null)==='wait')) { $flux['data'] = association_dons_url_suivi($suivi); }
 	return $flux;
 }
 
