@@ -99,7 +99,7 @@ function association_dons_confirmer_bank($id_transaction) {
 	$suivi = sql_fetsel('*', 'spip_asso_dons_suivi', 'id_transaction=' . (int)$id_transaction);
 	$transaction = sql_fetsel('*', 'spip_transactions', 'id_transaction=' . (int)$id_transaction);
 	if (!$suivi || !$transaction || $transaction['auteur_id'] !== 'association_dons:' . $suivi['id_don_suivi'] || !in_array($suivi['mode_paiement'], array('bank','fondation'), true) || $transaction['statut'] !== 'ok' || $transaction['reglee'] !== 'oui' || $transaction['devise'] !== $suivi['devise'] || (float)$transaction['montant_regle'] < (float)$suivi['montant']) { return false; }
-	$fondation = strpos($transaction['mode'] ?? '', 'fondation_roibaudouin/') === 0;
+	$fondation = strpos($transaction['mode'] ?? '', 'roi_baudouin/') === 0;
 	if ($suivi['mode_paiement']==='fondation' && !$fondation) { return false; }
 	if ($fondation && $suivi['mode_paiement']!=='fondation') {
 		if (sql_updateq('spip_asso_dons_suivi',array('mode_paiement'=>'fondation'),'id_don_suivi='.(int)$suivi['id_don_suivi'])===false) { return false; }
@@ -114,7 +114,7 @@ function association_dons_configuration_manuelle($suivi) {
  $transaction=sql_fetsel('*','spip_transactions','id_transaction='.(int)$suivi['id_transaction']);
  if (!$transaction || empty($transaction['mode']) || $transaction['auteur_id']!=='association_dons:'.$suivi['id_don_suivi']) { return false; }
  $config=bank_config($transaction['mode']);
- return $config && in_array($config['presta'],array('fondation_roibaudouin','virement','virement_multidevise','cheque'),true) ? $config : false;
+ return $config && in_array($config['presta'],array('roi_baudouin','virement','virement_multidevise','cheque'),true) ? $config : false;
 }
 function association_dons_confirmation_manuelle_possible($id_suivi) {
  $suivi=sql_fetsel('*','spip_asso_dons_suivi','id_don_suivi='.(int)$id_suivi);

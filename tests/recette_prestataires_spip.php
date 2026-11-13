@@ -4,24 +4,24 @@ define('_ASSOCIATION_DONS_CAPTURE_EMAILS',true);
 include_spip('inc/association_dons_notifications');include_spip('formulaires/configurer_association_dons');include_spip('public/assembler');include_spip('inc/filtres');include_spip('inc/bank');
 $avant=lire_config('association_dons',null);$bank_avant=lire_config('bank_paiement',array());$visiteur=$GLOBALS['visiteur_session']??array();$s=array();$r=array();$total=sql_countsel('spip_asso_comptes');
 try {
- $cfg=array('presta'=>'fondation_roibaudouin','actif'=>1,'type'=>'acte','config'=>'fondation_roibaudouin-recette','label'=>'RECETTE Fondation','url_fondation'=>'https://koningboudewijnstichting.twikey.com/web/fr/paymentForm.html');
- $b=$bank_avant;$b['config_fondation_roibaudouin-recette']=$cfg;ecrire_config('bank_paiement',$b);
- $c=association_dons_configuration();$c['mode_recette']='non';$c['notifications']='oui';$c['email_secretariat']='association-recette@example.invalid';$c['prestataires']=array('fondation_roibaudouin-recette');ecrire_config('association_dons',$c);
- $r['prestataire_decouvert']=in_array('fondation_roibaudouin',bank_lister_prestas(),true);
- $r['selection_config_exacte']=array_keys(association_dons_prestataires_selectionnes())===array('fondation_roibaudouin-recette');
+ $cfg=array('presta'=>'roi_baudouin','actif'=>1,'type'=>'acte','config'=>'roi_baudouin-recette','label'=>'RECETTE Fondation','url_fondation'=>'https://koningboudewijnstichting.twikey.com/web/fr/paymentForm.html');
+ $b=$bank_avant;$b['config_roi_baudouin-recette']=$cfg;ecrire_config('bank_paiement',$b);
+ $c=association_dons_configuration();$c['mode_recette']='non';$c['notifications']='oui';$c['email_secretariat']='association-recette@example.invalid';$c['prestataires']=array('roi_baudouin-recette');ecrire_config('association_dons',$c);
+ $r['prestataire_decouvert']=in_array('roi_baudouin',bank_lister_prestas(),true);
+ $r['selection_config_exacte']=array_keys(association_dons_prestataires_selectionnes())===array('roi_baudouin-recette');
  $GLOBALS['visiteur_session']=sql_fetsel('id_auteur,nom,statut,webmestre','spip_auteurs',"login='blobul_ai'");
  set_request('prestataires',array('inconnu'));$r['configuration_inconnue_refusee']=isset(formulaires_configurer_association_dons_verifier_dist('paiements')['prestataires']);
  set_request('prestataires',array());$r['selection_vide_refusee']=isset(formulaires_configurer_association_dons_verifier_dist('paiements')['prestataires']);
- set_request('prestataires',array('fondation_roibaudouin-recette'));$r['selection_valide']=!formulaires_configurer_association_dons_verifier_dist('paiements');
- $loader=formulaires_configurer_association_dons_charger_dist('paiements');$r['saisie_configs_bank']=$loader['_saisies'][0]['saisies'][0]['saisie']==='checkbox'&&isset($loader['_saisies'][0]['saisies'][0]['options']['data']['fondation_roibaudouin-recette']);
+ set_request('prestataires',array('roi_baudouin-recette'));$r['selection_valide']=!formulaires_configurer_association_dons_verifier_dist('paiements');
+ $loader=formulaires_configurer_association_dons_charger_dist('paiements');$r['saisie_configs_bank']=$loader['_saisies'][0]['saisies'][0]['saisie']==='checkbox'&&isset($loader['_saisies'][0]['saisies'][0]['options']['data']['roi_baudouin-recette']);
  $GLOBALS['visiteur_session']=array();
  $creation=association_dons_creer_soutien(array('nom'=>'RECETTE FONDATION BANK','prenom'=>'Test','email'=>'fondation-recette@example.invalid','type_donateur'=>'particulier','consentement'=>'oui'),'40','bank',bin2hex(random_bytes(32)));
  $s=$creation['suivi']??array();if(!$s){throw new RuntimeException('Création impossible');}
  foreach(sql_allfetsel('id_don_notification','spip_asso_dons_notifications','id_donateur='.(int)$s['id_donateur'])as$n){association_dons_envoyer_notification($n['id_don_notification']);}
  $t=sql_fetsel('*','spip_transactions','id_transaction='.(int)$s['id_transaction']);
  $html=recuperer_fond('modeles/association_dons_payer_acte',array('id_transaction'=>$s['id_transaction']));
- $r['seul_presta_selectionne']=strpos($html,'payer_fondation_roibaudouin')!==false&&strpos($html,'payer_stripe')===false;
- $call=charger_fonction('response','presta/fondation_roibaudouin/call');$response=array('id_transaction'=>$t['id_transaction'],'transaction_hash'=>$t['transaction_hash'],'autorisation_id'=>'wait');
+ $r['seul_presta_selectionne']=strpos($html,'payer_roi_baudouin')!==false&&strpos($html,'payer_stripe')===false;
+ $call=charger_fonction('response','presta/roi_baudouin/call');$response=array('id_transaction'=>$t['id_transaction'],'transaction_hash'=>$t['transaction_hash'],'autorisation_id'=>'wait');
  $attente=$call($cfg,$response);$t=sql_fetsel('*','spip_transactions','id_transaction='.(int)$s['id_transaction']);
  $r['choix_reste_attente']=$attente[1]==='wait'&&$t['statut']==='attente'&&$t['reglee']!=='oui';
  $flux=array('args'=>array('succes'=>'wait','id_transaction'=>$s['id_transaction'],'row'=>$t),'data'=>'fallback');
