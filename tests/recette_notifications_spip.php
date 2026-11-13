@@ -34,6 +34,10 @@ try {
 	$m_association = end($GLOBALS['association_dons_emails_captures']);
 	$r['destinataire_association_configure'] = $m_association['destinataire'] === 'recette-association@example.invalid';
 	$r['lien_prive_sans_jeton'] = strpos($m_association['texte'], 'exec=association_donateur') !== false && strpos($m_association['texte'], 'jeton=') === false;
+	$corps = association_dons_corps_mail($m_association);
+	$r['email_html_retours_ligne'] = is_array($corps) && strpos($corps['html'], '<br') !== false && $corps['texte'] === $m_association['texte'];
+	$malveillant = association_dons_corps_mail(array('sujet' => 'RECETTE', 'texte' => '<script>RECETTE</script>'));
+	$r['email_html_echappe'] = strpos($malveillant['html'], '<script>RECETTE</script>') === false;
 	$r['contenu_association'] = strpos($m_association['texte'], 'recette-emails@example.invalid') !== false && strpos($m_association['texte'], '40,00 EUR') !== false && strpos($m_association['texte'], '2027') !== false;
 	pipeline('association_dons_evenement', array('args' => array('evenement' => 'soutien_regle', 'id_donateur' => $id, 'id_don_suivi' => $s['id_don_suivi']), 'data' => array()));
 	$r['rejeu_reglement_sans_doublon'] = sql_countsel('spip_asso_dons_notifications', 'id_donateur=' . $id . " AND type_notification IN ('soutien_regle','soutien_regle_association')") === 2 && !association_dons_envoyer_notification($n_regle) && !association_dons_envoyer_notification($n_association);

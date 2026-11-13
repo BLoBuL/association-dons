@@ -53,6 +53,14 @@ function association_dons_message_notification($notification) {
 	} finally { lang_select(); }
 }
 
+/** Conserver une alternative texte et une présentation HTML échappée dans Facteur. */
+function association_dons_corps_mail($message) {
+ if (!test_plugin_actif('facteur')) { return $message['texte']; }
+ include_spip('inc/filtres');
+ $html = recuperer_fond('emails/texte', array('sujet' => $message['sujet'], 'texte' => nl2br(entites_html($message['texte']))));
+ return array('texte' => $message['texte'], 'html' => $html);
+}
+
 /** Un résultat transport incertain n'est jamais rejoué automatiquement. */
 function association_dons_envoyer_notification($id_notification) {
 	if (association_dons_configuration()['notifications'] !== 'oui') { return false; }
@@ -69,7 +77,7 @@ function association_dons_envoyer_notification($id_notification) {
 			$accepte = true;
 		} else {
 			$envoyer = charger_fonction('envoyer_mail', 'inc');
-			$accepte = $envoyer($message['destinataire'], $message['sujet'], $message['texte']);
+			$accepte = $envoyer($message['destinataire'], $message['sujet'], association_dons_corps_mail($message));
 		}
 		$etat = $accepte ? ((defined('_ASSOCIATION_DONS_CAPTURE_EMAILS') && _ASSOCIATION_DONS_CAPTURE_EMAILS) ? 'capture' : 'accepte') : 'incertain';
 		sql_updateq('spip_asso_dons_notifications', array('etat' => $etat, 'date_envoi' => $accepte ? date('Y-m-d H:i:s') : '0000-00-00 00:00:00'), 'id_don_notification=' . (int)$id_notification);
