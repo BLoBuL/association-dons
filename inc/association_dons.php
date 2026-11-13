@@ -87,3 +87,16 @@ function association_dons_prestataires_labels() {
  }
  return $data;
 }
+
+function association_dons_config_sections() {
+ $sections = array(
+  'recette' => array('mode_recette'),
+  'montants' => array('montants','minimum','devise'),
+  'paiements' => array('prestataires'),
+  'comptabilite' => array('journal_dons','imputation_dons'),
+  'confidentialite' => array('url_confidentialite'),
+  'notifications' => array('notifications','email_secretariat','delai_rappel','preavis_renouvellement'),
+ );
+ if (!defined('_DIR_PLUGIN_ASSOCIATION') && !defined('_DIR_PLUGIN_ASSOCIATION_COMPTA')) { unset($sections['comptabilite']); }
+ return $sections;
+}

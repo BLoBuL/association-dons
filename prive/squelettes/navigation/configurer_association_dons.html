@@ -2,11 +2,12 @@
 <INCLURE{fond=prive/squelettes/navigation/dist,env} />
 [(#BOITE_OUVRIR{'','raccourcis'})]
 <ul class="liste_items sous_navigation">
-<BOUCLE_sections(DATA){source table,#LISTE{recette,montants,paiements,comptabilite,confidentialite,notifications}}>
-<li class="item[ (#ENV{config,recette}|=={#VALEUR}|oui)on]">
-<a class="bando2" href="[(#URL_ECRIRE{configurer_association_dons}|parametre_url{config,#VALEUR})]"[(#ENV{config,recette}|=={#VALEUR}|oui) aria-current="page"]>[(#VAL{association_dons:config_}|concat{#VALEUR}|_T)]</a>
+<BOUCLE_sections(DATA){source table,(#VAL{''}|association_dons_config_sections)}>
+<li class="item[ (#ENV{config,recette}|=={#CLE}|oui)on]">
+<a class="bando2" href="[(#URL_ECRIRE{configurer_association_dons}|parametre_url{config,#CLE})]"[(#ENV{config,recette}|=={#CLE}|oui) aria-current="page"]>[(#VAL{association_dons:config_}|concat{#CLE}|_T)]</a>
 </li>
 </BOUCLE_sections>
 </ul>
 #BOITE_FERMER
 ]
+

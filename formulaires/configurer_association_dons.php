@@ -2,16 +2,6 @@
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 include_spip('inc/association_dons');
 
-function association_dons_config_sections() {
- return array(
-  'recette' => array('mode_recette'),
-  'montants' => array('montants','minimum','devise'),
-  'paiements' => array('prestataires'),
-  'comptabilite' => array('journal_dons','imputation_dons'),
-  'confidentialite' => array('url_confidentialite'),
-  'notifications' => array('notifications','email_secretariat','delai_rappel','preavis_renouvellement'),
- );
-}
 function association_dons_config_valeurs() {
  $config=association_dons_configuration();
  $config['notifications']=lire_config('association_dons/notifications','non');
