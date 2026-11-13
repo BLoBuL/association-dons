@@ -4,7 +4,7 @@
 <div class="onglets_simple clearfix"><ul>
 <li>[(#SELF|parametre_url{statut_donateurs,''}|parametre_url{debut_donateurs,''}|lien_ou_expose{<:info_tout_afficher:>,#ENV{statut_donateurs,''}|non,ajax})]</li>
 <BOUCLE_statuts(DATA){source table,#LISTE{a_jour,attente,echu,ancien}}>
-<li>[(#SELF|parametre_url{statut_donateurs,#VALEUR}|parametre_url{debut_donateurs,''}|lien_ou_expose{#VALEUR|association_dons_libelle_statut,#ENV{statut_donateurs,''}|=={#VALEUR},ajax})]</li>
+<li>[(#SELF|parametre_url{statut_donateurs,#VALEUR}|parametre_url{debut_donateurs,''}|lien_ou_expose{[(#VALEUR|association_dons_libelle_statut)],#ENV{statut_donateurs,''}|=={#VALEUR},ajax})]</li>
 </BOUCLE_statuts>
 </ul></div>
 #FORMULAIRE_RECHERCHE_ECRIRE{#SELF,ajax}

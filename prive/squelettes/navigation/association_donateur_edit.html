@@ -1,0 +1,15 @@
+#CACHE{0}
+[(#AUTORISER{gerer,associationdons}|oui)
+[(#BOITE_OUVRIR{<:association_dons:configuration:>,raccourcis})]
+<ul class="liste_items"><li><a href="#URL_ECRIRE{association_donateurs}"><:association_dons:retour_liste:></a></li><li><a href="#URL_ECRIRE{configurer_association_dons}"><:association_dons:configuration:></a></li><li><a href="#URL_ECRIRE{dons}"><:association_dons:dons_historiques:></a></li></ul>
+#BOITE_FERMER
+]
+
+[(#AUTORISER{gerer,associationdons}|oui)
+<BOUCLE_info(ASSO_DONATEURS){id_donateur}>
+[(#BOITE_OUVRIR{'',info})]
+<p><strong><:association_dons:fiche_donateur:> #ID_DONATEUR</strong></p>
+<p>[(#ID_DONATEUR|association_dons_statut_fiche|association_dons_libelle_statut)]</p>
+#BOITE_FERMER
+</BOUCLE_info>
+]
