@@ -22,6 +22,9 @@ try {
 	if (empty($resultat['suivi'])) { throw new RuntimeException('Création Bank refusée.'); }
 	$suivi = $resultat['suivi'];
 	$r['bank_cree_sans_adherent'] = $suivi['id_transaction'] > 0 && association_dons_donateur($suivi['id_donateur'])['id_organisation'] == 0;
+	include_spip('inc/bank');
+	$description = bank_description_transaction($suivi['id_transaction']);
+	$r['libelle_bank_don_avant_reglement'] = strpos($description['libelle'], 'Don Ami') !== false;
 	$r['intention_absente_dons_historiques'] = empty($suivi['id_don']);
 	$r['attente_avant_paiement'] = association_dons_statut(association_dons_donateur($suivi['id_donateur']), association_dons_periodes($suivi['id_donateur']), date('Y-m-d')) === 'attente';
 	$r['double_soumission'] = association_dons_creer_soutien($donnees, '40', 'bank', $cle)['suivi']['id_don_suivi'] === $suivi['id_don_suivi'];
@@ -36,6 +39,8 @@ try {
 	pipeline('bank_traiter_reglement', $flux);
 	$r['pipeline_reglement'] = sql_getfetsel('statut', 'spip_asso_dons_suivi', 'id_don_suivi=' . (int)$suivi['id_don_suivi']) === 'regle';
 	$suivi = sql_fetsel('*', 'spip_asso_dons_suivi', 'id_don_suivi=' . (int)$suivi['id_don_suivi']);
+	$description = bank_description_transaction($suivi['id_transaction']);
+	$r['libelle_bank_don_apres_reglement'] = strpos($description['libelle'], 'Don Ami') !== false && strpos($description['libelle'], 'ADH') === false;
 	$r['don_historique_apres_confirmation'] = (bool)sql_countsel('spip_asso_dons', 'id_don=' . (int)$suivi['id_don']);
 	$r['a_jour_apres_reglement'] = association_dons_statut(association_dons_donateur($suivi['id_donateur']), association_dons_periodes($suivi['id_donateur']), date('Y-m-d')) === 'a_jour';
 	pipeline('bank_traiter_reglement', $flux);

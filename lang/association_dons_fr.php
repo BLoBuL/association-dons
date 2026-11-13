@@ -1,6 +1,8 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'bank_don_libelle' => 'Don Ami n° @reference@',
+	'bank_don_description' => 'Soutien annuel jusqu’à fin @annee@',
 	'config_titre' => 'Configurer les dons et les Amis',
 	'config_introduction' => 'Paramétrez le module par rubrique. Chaque enregistrement conserve les réglages des autres rubriques.',
 	'config_recette' => 'Mode recette et ouverture',

@@ -46,3 +46,16 @@ function association_dons_afficher_contenu_objet($flux) {
 	}
 	return $flux;
 }
+
+/** Libellé métier natif Bank : un don autonome ne doit pas devenir une adhésion. */
+function association_dons_bank_description_transaction($flux) {
+ $id = (int)($flux['args']['id_transaction'] ?? 0);
+ if (!$id) { return $flux; }
+ $s = sql_fetsel('id_don_suivi,id_donateur_periode', 'spip_asso_dons_suivi', 'id_transaction=' . $id . " AND mode_paiement='bank'");
+ $auteur = $s ? sql_getfetsel('auteur_id', 'spip_transactions', 'id_transaction=' . $id) : '';
+ if (!$s || $auteur !== 'association_dons:' . $s['id_don_suivi']) { return $flux; }
+ $annee = sql_getfetsel('annee', 'spip_asso_donateurs_periodes', 'id_donateur_periode=' . (int)$s['id_donateur_periode']);
+ $flux['data']['libelle'] = _T('association_dons:bank_don_libelle', array('reference' => $s['id_don_suivi']));
+ $flux['data']['description'] = _T('association_dons:bank_don_description', array('annee' => $annee));
+ return $flux;
+}

@@ -1,6 +1,8 @@
 <?php
 if (!defined('_ECRIRE_INC_VERSION')) { return; }
 $GLOBALS[$GLOBALS['idx_lang']] = array(
+	'bank_don_libelle' => 'Friend donation no. @reference@',
+	'bank_don_description' => 'Annual support until the end of @annee@',
 	'config_titre' => 'Configure donations and Friends',
 	'config_introduction' => 'Configure the module by section. Saving a section preserves all other settings.',
 	'config_recette' => 'Test mode and opening',
