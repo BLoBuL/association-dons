@@ -1,18 +1,24 @@
 #CACHE{0}
 [(#AUTORISER{gerer,associationdons}|sinon_interdire_acces)]
-<h1 class="grostitre"><:association_dons:fiche_donateur:></h1>
-<p><a href="#URL_ECRIRE{association_donateurs}"><:association_dons:retour_liste:></a></p>
+[(#ENV{id_donateur,0}|intval|et{#ENV{editer}|!={oui}}|oui)
 <BOUCLE_identite(ASSO_DONATEURS){id_donateur}>
-<h2>[(#PRENOM|textebrut|entites_html)] [(#NOM|textebrut|entites_html)]</h2>
-[<p>(#RAISON_SOCIALE|textebrut|entites_html)</p>]
-<p>[(#EMAIL|entites_html)] — [(#ID_DONATEUR|association_dons_statut_fiche|association_dons_libelle_statut)]</p>
+<div class="cartouche"><h1 class="grostitre">[(#PRENOM|textebrut|entites_html)] [(#NOM|textebrut|entites_html)]</h1>
+[<p class="soustitre">(#RAISON_SOCIALE|textebrut|entites_html)</p>]</div>
+[(#BOITE_OUVRIR{'',simple})]
+<p>[(#EMAIL|entites_html)]</p><p>[(#ID_DONATEUR|association_dons_statut_fiche|association_dons_libelle_statut)]</p>
+#BOITE_PIED
+[(#URL_ECRIRE{association_donateur}|parametre_url{id_donateur,#ID_DONATEUR}|parametre_url{editer,oui}|icone_verticale{<:association_dons:modifier_coordonnees:>,auteur,edit,right})]
+#BOITE_FERMER
 </BOUCLE_identite>
-<details><summary><:association_dons:modifier_coordonnees:></summary>
+]
+[(#ENV{id_donateur,0}|intval|non|ou{#ENV{editer}|=={oui}}|oui)
+<div class="cadre-formulaire-editer"><div class="entete-formulaire">
+[(#URL_ECRIRE{association_donateurs}|icone_verticale{<:icone_retour:>,auteur,'',left retour})]
+<:association_dons:fiche_donateur:><h1><:association_dons:modifier_coordonnees:></h1>
+</div>
 #FORMULAIRE_EDITER_ASSOCIATION_DONATEUR{#ENV{id_donateur,0}}
-</details>
-</B_identite>
-#FORMULAIRE_EDITER_ASSOCIATION_DONATEUR{0}
-<//B_identite>
+</div>
+]
 <BOUCLE_donateur(ASSO_DONATEURS){id_donateur}>
 <B_periodes><div class="liste-objets periodes"><table class="spip liste"><caption><strong class="caption"><:association_dons:periodes:></strong></caption><thead><tr><th scope="col"><:association_dons:annee:></th><th scope="col"><:association_dons:validite:></th><th scope="col"><:association_dons:statut:></th></tr></thead><tbody class="liste_items"><BOUCLE_periodes(ASSO_DONATEURS_PERIODES){id_donateur}{par annee}{inverse}><tr><td>#ANNEE</td><td>[(#DATE_DEBUT|affdate)] — [(#DATE_FIN|affdate)]</td><td>[(#STATUT|association_dons_libelle_statut)]</td></tr></BOUCLE_periodes></tbody></table></div></B_periodes><p><:association_dons:aucune_periode:></p><//B_periodes>
 <B_dons><div class="liste-objets dons"><table class="spip liste"><caption><strong class="caption"><:association_dons:dons:></strong></caption><thead><tr><th scope="col"><:association_dons:don:></th><th scope="col"><:association_dons:montant:></th><th scope="col"><:association_dons:paiement:></th></tr></thead><tbody class="liste_items"><BOUCLE_dons(ASSO_DONS_SUIVI){id_donateur}{par id_don_suivi}{inverse}><tr><td>[(#ID_DON|oui)<a href="[(#URL_ECRIRE{edit_don}|parametre_url{id,#ID_DON})]">#ID_DON</a>][(#ID_DON|non)<:association_dons:statut_attente:>]</td><td>[(#MONTANT|number_format{2,',',' '})] #DEVISE</td><td>[(#MODE_PAIEMENT|association_dons_libelle_paiement)] — [(#STATUT|association_dons_libelle_reglement)]</td></tr></BOUCLE_dons></tbody></table></div></B_dons><p><:association_dons:aucun_don:></p><//B_dons>
